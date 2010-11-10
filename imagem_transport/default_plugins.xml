@@ -1,0 +1,33 @@
+<library path="lib/libimagem_transport">
+	<class name="raw_pub" 
+		type="message_transport::RawPublisher<sensor_msgs::Image>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
+    <description>
+      This is the default publisher. It publishes the objects as-is on the base topic.
+    </description>
+  </class>
+
+  <class name="raw_sub" 
+		type="message_transport::RawSubscriber<sensor_msgs::Image>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
+    <description>
+      This is the default pass-through subscriber for topics of type Image
+    </description>
+  </class>
+
+  <class name="sharedmem_pub" 
+		type="sharedmem_transport::SharedmemPublisherWithHeader<sensor_msgs::Image>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
+    <description>
+      This is the default publisher. It publishes the objects as-is on the base topic.
+    </description>
+  </class>
+
+  <class name="sharedmem_sub" 
+		type="sharedmem_transport::SharedmemSubscriber<sensor_msgs::Image>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
+    <description>
+      This is the default pass-through subscriber for topics of type Image
+    </description>
+  </class>
+</library>

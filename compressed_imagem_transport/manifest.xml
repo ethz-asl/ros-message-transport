@@ -1,0 +1,22 @@
+<package>
+  <description brief="compressed_imagem_transport">
+
+     compressed_imagem_transport
+
+  </description>
+  <author>Cedric Pradalier</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://pr.willowgarage.com/wiki/compressed_imagem_transport</url>
+  <depend package="sensor_msgs"/>
+  <depend package="message_transport_common"/>
+  <depend package="imagem_transport"/>
+  <depend package="opencv2"/>
+  <depend package="cv_bridge"/>
+
+  <export>
+    <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lcompressed_imagem_transport" cflags="-I${prefix}/include"/>
+	<imagem_transport plugin="${prefix}/compressedm_plugins.xml" /> 
+  </export>
+
+</package>

@@ -1,0 +1,27 @@
+<package>
+  <description brief="imagem_transport">
+
+     imagem_transport (the m is here to avoid the confusion with the
+	 image_transport package)
+
+  </description>
+  <author>Cedric Pradalier</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/imagem_transport</url>
+  <depend package="pluginlib"/>
+  <depend package="message_transport_common"/>
+  <depend package="sharedmem_transport"/>
+  <depend package="sensor_msgs"/>
+  <depend package="opencv2"/>
+  <depend package="cv_bridge"/>
+  <depend package="message_filters"/>
+
+  <export>
+    <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -limagem_transport" cflags="-I${prefix}/include"/>
+    <imagem_transport plugin="${prefix}/default_plugins.xml" />
+  </export>
+
+</package>
+
+

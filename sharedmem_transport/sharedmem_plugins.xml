@@ -1,0 +1,14 @@
+<library path="lib/libsharedmem_image_transport">
+  <class name="sharedmem_pub" type="sharedmem_image_transport::SharedmemPublisher" base_class_type="image_transport::PublisherPlugin">
+    <description>
+		This plugin publishes only an image header, the image content can be
+		accessed via shared memory.
+    </description>
+  </class>
+
+  <class name="sharedmem_sub" type="sharedmem_image_transport::SharedmemSubscriber" base_class_type="image_transport::SubscriberPlugin">
+    <description>
+      This plugin deserialize an image shared via shared memory
+    </description>
+  </class>
+</library>

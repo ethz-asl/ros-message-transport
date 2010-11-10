@@ -1,0 +1,27 @@
+<package>
+  <description brief="theora_imagem_transport">
+
+     theora_imagem_transport
+
+  </description>
+  <author>Ethan Dreyfuss, Cedric Pradalier</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://pr.willowgarage.com/wiki/theora_imagem_transport</url>
+  <depend package="sensor_msgs"/>
+  <depend package="message_transport_common"/>
+  <depend package="sharedmem_transport"/>
+  <depend package="imagem_transport"/>
+  <depend package="opencv2"/>
+  <depend package="cv_bridge"/>
+  <depend package="libtheora"/>
+  <depend package="pluginlib"/>
+
+  <rosdep name="libogg"/>
+
+  <export>
+    <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -ltheora_image_transport" cflags="-I${prefix}/include"/>
+    <imagem_transport plugin="${prefix}/compressed_plugins.xml" />
+  </export>
+
+</package>

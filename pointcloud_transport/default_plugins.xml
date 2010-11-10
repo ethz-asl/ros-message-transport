@@ -1,0 +1,50 @@
+<library path="lib/libpointcloud_transport">
+	<class name="raw_pub" 
+		type="message_transport::RawPublisher<sensor_msgs::PointCloud>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
+    <description>
+      This is the default publisher. It publishes the objects as-is on the base topic.
+    </description>
+  </class>
+
+  <class name="raw_sub" 
+		type="message_transport::RawSubscriber<sensor_msgs::PointCloud>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
+    <description>
+      This is the default pass-through subscriber for topics of type PointCloud
+    </description>
+  </class>
+
+  <class name="sharedmem_pub" 
+		type="sharedmem_transport::SharedmemPublisherWithHeader<sensor_msgs::PointCloud>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
+    <description>
+      This is the default publisher. It publishes the objects as-is on the base topic.
+    </description>
+  </class>
+
+  <class name="sharedmem_sub" 
+		type="sharedmem_transport::SharedmemSubscriber<sensor_msgs::PointCloud>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
+    <description>
+      This is the default pass-through subscriber for topics of type PointCloud
+    </description>
+  </class>
+
+
+  <class name="decimated_pub" 
+		type="decimated_transport::DecimatedPublisher" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
+    <description>
+		This publisher only published 1/10th of the point cloud data
+    </description>
+  </class>
+
+  <class name="decimated_sub" 
+		type="decimated_transport::DecimatedSubscriber" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
+    <description>
+      This is the default pass-through subscriber for topics of type PointCloud
+    </description>
+  </class>
+</library>

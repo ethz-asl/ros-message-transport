@@ -1,0 +1,9 @@
+<stack>
+  <description brief="message_transport">message_transport</description>
+  <author>Maintained by Cedric Pradalier</author>
+  <license>BSD</license>  
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/message_transport</url>
+  <depend stack="ros" />
+
+</stack>

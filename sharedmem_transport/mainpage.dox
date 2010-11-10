@@ -1,0 +1,32 @@
+/**
+\mainpage
+\htmlinclude manifest.html
+
+\b sharedmem_image_transport is a plugin for transporting images via shared
+memory instead of network loopback, when running on a single machine. 
+
+This package behaves as a normal image_transport plugin (see
+compressed_image_transport or theora_image_transport). However, it requires to
+have the sharedmem_manager node running. The sharedmem_manager creates the
+shared memory segment in which all images are stores. The segment size is
+defined by the private parameter segment_size (in bytes). 
+
+Obviously, this transport will only work between process on the same machine,
+and possibly on the same user. 
+
+
+\section codeapi Code API
+
+<!--
+Provide links to specific auto-generated API documentation within your
+package that is of particular interest to a reader. Doxygen will
+document pretty much every part of your code, so do your best here to
+point the reader to the actual API.
+
+If your codebase is fairly large or has different sets of APIs, you
+should use the doxygen 'group' tag to keep these APIs together. For
+example, the roscpp documentation has 'libros' group.
+-->
+
+
+*/

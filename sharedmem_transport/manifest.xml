@@ -1,0 +1,17 @@
+<package>
+  <description brief="sharedmem_transport">
+
+     sharedmem_transport
+
+  </description>
+  <author>Cedric Pradalier</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://pr.willowgarage.com/wiki/sharedmem_transport</url>
+  <depend package="message_transport_common"/>
+
+  <export>
+    <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lsharedmem_transport" cflags="-I${prefix}/include"/>
+  </export>
+
+</package>

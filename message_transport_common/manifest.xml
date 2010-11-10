@@ -1,0 +1,18 @@
+<package>
+  <description brief="message_transport_common">
+
+	  message_transport is a generic architecture for writing object transport,
+	  similar to the message_transport architecture. 
+  </description>
+  <author>Cedric Pradalier</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/message_transport_common</url>
+  <depend package="pluginlib"/>
+  <depend package="message_filters"/>
+
+  <export>
+    <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lmessage_transport_common" cflags="-I${prefix}/include"/>
+  </export>
+
+</package>

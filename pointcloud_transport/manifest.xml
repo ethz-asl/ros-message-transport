@@ -1,0 +1,23 @@
+<package>
+  <description brief="pointcloud_transport">
+
+     pointcloud_transport
+
+  </description>
+  <author>Cedric Pradalier</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/pointcloud_transport_base</url>
+  <depend package="pluginlib"/>
+  <depend package="message_transport_common"/>
+  <depend package="sharedmem_transport"/>
+  <depend package="sensor_msgs"/>
+
+  <export>
+    <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lpointcloud_transport" cflags="-I${prefix}/include"/>
+    <pointcloud_transport plugin="${prefix}/default_plugins.xml" />
+  </export>
+
+</package>
+
+
