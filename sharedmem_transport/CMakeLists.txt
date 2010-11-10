@@ -31,5 +31,5 @@ rosbuild_add_boost_directories()
 # rosbuild_link_boost(${PROJECT_NAME} )
 
 rosbuild_add_executable(sharedmem_manager src/sharedmem_manager.cpp)
-target_link_libraries(sharedmem_manager )
+target_link_libraries(sharedmem_manager rt)
 
