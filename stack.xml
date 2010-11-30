@@ -1,5 +1,5 @@
 <stack>
-  <description brief="message_transport">message_transport</description>
+  <description brief="ethzasl_message_transport">Generic message transport plugin architecture</description>
   <author>Maintained by Cedric Pradalier</author>
   <license>BSD</license>  
   <review status="unreviewed" notes=""/>

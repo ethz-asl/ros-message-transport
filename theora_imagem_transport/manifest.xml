@@ -14,9 +14,8 @@
   <depend package="imagem_transport"/>
   <depend package="opencv2"/>
   <depend package="cv_bridge"/>
-  <depend package="libtheora"/>
   <depend package="pluginlib"/>
-
+  <rosdep name="libtheora"/>
   <rosdep name="libogg"/>
 
   <export>
