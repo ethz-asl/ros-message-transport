@@ -4,12 +4,18 @@
 
 std::string transport;
 unsigned int npoints = 0;
+
+// #define RECORD
+
+#ifdef RECORD
 FILE * fp=NULL;
+#endif
 
 void callback(const sensor_msgs::PointCloudConstPtr& pointcloud)
 {
 	double tnow = ros::Time::now().toSec();
 	double tstamp = pointcloud->header.stamp.toSec();
+#ifdef RECORD
 	if (!fp) {
 		char fname[512];
 		sprintf(fname,"received_%d_%s_%d.txt",
@@ -18,15 +24,18 @@ void callback(const sensor_msgs::PointCloudConstPtr& pointcloud)
 		fp = fopen(fname,"w");
 	}
 	fprintf(fp,"%d %f %f %f\n",npoints,tnow,tstamp,tnow-tstamp);
+#endif
 	npoints ++;
 
 	ROS_INFO("%d: Scan received at %f, delay %f",
 			getpid(),tstamp,tnow-tstamp);
 
+#ifdef RECORD
 	if (npoints > 1000) {
 		fclose(fp);
 		ros::shutdown();
 	}
+#endif
 }
 
 int main(int argc, char** argv)
