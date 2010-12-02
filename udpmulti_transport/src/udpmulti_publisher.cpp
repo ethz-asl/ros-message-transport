@@ -28,14 +28,14 @@ namespace udpmulti_transport {
         socket_ = NULL;
 	}
 
-    void UDPMultiPublisherImpl::initialise(ros::NodeHandle & nh, const std::string & topicname) {
+    void UDPMultiPublisherImpl::initialise(const std::string & topicname) {
         // TODO: Add a port management mechanism
 
         ROS_INFO("Waiting for service '/udpmulti_manager/register_topic' to be ready");
         ros::service::waitForService("/udpmulti_manager/register_topic");
         ROS_INFO("Requesting UDP Multicast port and address");
 
-        ros::ServiceClient requestPortClt = nh.serviceClient<udpmulti_transport::UDPMultRegisterTopic>("/udpmulti_manager/register_topic");
+        ros::ServiceClient requestPortClt = nh_.serviceClient<udpmulti_transport::UDPMultRegisterTopic>("/udpmulti_manager/register_topic");
         udpmulti_transport::UDPMultRegisterTopic srv;
         srv.request.topic = topicname;
         if (!requestPortClt.call(srv)) {

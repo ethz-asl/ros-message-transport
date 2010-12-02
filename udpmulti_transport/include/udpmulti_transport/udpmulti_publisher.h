@@ -18,7 +18,11 @@ namespace udpmulti_transport {
             UDPMultiPublisherImpl();
 			virtual ~UDPMultiPublisherImpl();
 
-			void initialise(ros::NodeHandle & nh, const std::string & topicname);
+            void setNodeHandle(ros::NodeHandle & nh) {
+                nh_ = nh;
+            }
+
+			void initialise(const std::string & topicname);
 			uint32_t getPort() const;
 			const std::string & getMulticastAddress() const;
 
@@ -32,6 +36,7 @@ namespace udpmulti_transport {
             boost::asio::io_service io_service_;
             boost::asio::ip::udp::endpoint *endpoint_;
             boost::asio::ip::udp::socket *socket_;
+            ros::NodeHandle nh_;
 
 	};
 
@@ -51,7 +56,7 @@ namespace udpmulti_transport {
 			}
 		protected:
 			virtual void postAdvertiseInit() {
-                impl.initialise(this->getNodeHandle(),this->getTopic());
+                impl.setNodeHandle(this->getNodeHandle());
             }
 			virtual void connectCallback(const ros::SingleSubscriberPublisher& pub) {
                 ROS_INFO("Received connection request");
@@ -65,6 +70,7 @@ namespace udpmulti_transport {
 				
                 uint32_t datasize;
                 if (first_run_) {
+                    impl.initialise(this->getTopic());
                     this->publishInternal(impl.getUDPHeader());
                     first_run_ = false;
                 }

@@ -24,3 +24,4 @@ PLUGINLIB_REGISTER_CLASS(decimated_sub, decimated_transport::DecimatedSubscriber
 // UDP multi-casting class
 PLUGINLIB_REGISTER_CLASS(udpmulti_pub, udpmulti_transport::UDPMultiPublisher<sensor_msgs::PointCloud>, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
 PLUGINLIB_REGISTER_CLASS(udpmulti_sub, udpmulti_transport::UDPMultiSubscriber<sensor_msgs::PointCloud>, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
+

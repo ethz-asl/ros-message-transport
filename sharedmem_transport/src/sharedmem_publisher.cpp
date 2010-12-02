@@ -25,11 +25,6 @@ namespace sharedmem_transport {
 		alloc_length_ = 0;
 		segment_ = NULL;
 		clientRegistered = false;
-		try {
-			segment_ = new managed_shared_memory(open_only,ROSSharedMemoryBlock);
-		} catch (std::exception e) {
-			ROS_ERROR("Could not open shared memory segment");
-		}
 	}
 
 	SharedmemPublisherImpl::~SharedmemPublisherImpl()
@@ -52,22 +47,31 @@ namespace sharedmem_transport {
 		delete segment_;
 	}
 
-	void SharedmemPublisherImpl::registerServices(ros::NodeHandle &nh) {
+	void SharedmemPublisherImpl::registerServices() {
 		if (!clientRegistered) {
 			clientRegistered = true;
-			requestMemoryClt = nh.serviceClient<sharedmem_transport::SHMRequestMemory>("/sharedmem_manager/request_memory");
-			releaseMemoryClt = nh.serviceClient<sharedmem_transport::SHMReleaseMemory>("/sharedmem_manager/release_memory");
-			registerMemoryClt = nh.serviceClient<sharedmem_transport::SHMRegisterMemory>("/sharedmem_manager/register_memory");
+            ROS_INFO("Waiting for service '/sharedmem_manager/request_memory' to be ready");
+            ros::service::waitForService("/sharedmem_manager/request_memory");
+            ROS_INFO("Requesting shared memory segment");
+
+            try {
+                segment_ = new managed_shared_memory(open_only,ROSSharedMemoryBlock);
+            } catch (std::exception e) {
+                ROS_ERROR("Could not open shared memory segment");
+            }
+
+			requestMemoryClt = nh_.serviceClient<sharedmem_transport::SHMRequestMemory>("/sharedmem_manager/request_memory");
+			releaseMemoryClt = nh_.serviceClient<sharedmem_transport::SHMReleaseMemory>("/sharedmem_manager/release_memory");
+			registerMemoryClt = nh_.serviceClient<sharedmem_transport::SHMRegisterMemory>("/sharedmem_manager/register_memory");
 			ROS_INFO("Sharedmem manager clients registered");
 		}
 
-		ROS_INFO("Initial alloc length is %d",alloc_length_);
 
 		if (!alloc_length_) {
 			// If the pointer has not been allocated yet, we check if there is 
 			// a param telling us what to allocate
 			int block_size = 0;
-			nh.param<int>("~sharedmem_block_size",block_size,0);
+			nh_.param<int>("sharedmem_block_size",block_size,0);
 			ROS_INFO("Looked for param 'sharedmem_block_size': %d",block_size);
 			if (block_size) {
 				alloc_length_ = block_size;
@@ -77,7 +81,7 @@ namespace sharedmem_transport {
 	}
 
 	SharedMemMessage SharedmemPublisherImpl::publish_msg(const ros::Message& message,
-			const roslib::Header& header) const
+			const roslib::Header& header) 
 	{
 		SharedMemMessage output;
 		uint32_t serlen = ros::serialization::serializationLength(message);
@@ -85,6 +89,8 @@ namespace sharedmem_transport {
 		output.header = header;
 		output.blockid = 0;
 		output.blocksize = 0;
+
+        registerServices();
 
 		if (!segment_) {
 			ROS_ERROR("Sharedmem publisher cannot be used without sharedmem_manager running");

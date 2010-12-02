@@ -15,21 +15,27 @@ namespace sharedmem_transport {
 			SharedmemPublisherImpl();
 			virtual ~SharedmemPublisherImpl();
 
-			void registerServices(ros::NodeHandle & nh);
+			void registerServices();
 
-			SharedMemMessage publish_msg(const ros::Message& message, const roslib::Header& header) const;
+            void setNodeHandle(ros::NodeHandle & nh) {
+                nh_ = nh;
+            }
+
+
+			SharedMemMessage publish_msg(const ros::Message& message, const roslib::Header& header) ;
 		protected:
 			boost::interprocess::managed_shared_memory *segment_ ;
 			bool clientRegistered;
-			mutable ros::ServiceClient registerMemoryClt;
-			mutable ros::ServiceClient requestMemoryClt;
-			mutable ros::ServiceClient releaseMemoryClt;
+			ros::ServiceClient registerMemoryClt;
+			ros::ServiceClient requestMemoryClt;
+			ros::ServiceClient releaseMemoryClt;
 
 			// This will be modified after the first image is received, so we
 			// mark them mutable and publish stays "const"
-			mutable uint8_t * ptr_;
-			mutable uint32_t alloc_length_;
-			mutable uint32_t handle_;
+			uint8_t * ptr_;
+			uint32_t alloc_length_;
+			uint32_t handle_;
+            ros::NodeHandle nh_;
 			
 	};
 
@@ -48,7 +54,7 @@ namespace sharedmem_transport {
 
 		protected:
 			virtual void postAdvertiseInit() {
-				impl.registerServices(this->getNodeHandle());
+				impl.setNodeHandle(this->getNodeHandle());
 			}
 
 			virtual void publish(const Base& message,
