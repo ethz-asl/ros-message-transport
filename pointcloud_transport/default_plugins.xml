@@ -36,7 +36,7 @@
 		type="decimated_transport::DecimatedPublisher" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
-		This publisher only published 1/10th of the point cloud data
+		This publisher only publishes 1/10th of the point cloud data
     </description>
   </class>
 
@@ -45,6 +45,23 @@
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
       This is the default pass-through subscriber for topics of type PointCloud
+    </description>
+  </class>
+
+  <class name="udpmulti_pub" 
+		type="udpmulti_transport::UDPMultiPublisher<sensor_msgs::PointCloud>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
+    <description>
+        This publisher published this point cloud as UDP multicast telegram. 
+        Size is limited to 8092 bytes
+    </description>
+  </class>
+
+  <class name="udpmulti_sub" 
+		type="udpmulti_transport::UDPMultiSubscriber<sensor_msgs::PointCloud>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
+    <description>
+        This subscriber subscribes to point cloud UDP multicast telegrams. 
     </description>
   </class>
 </library>

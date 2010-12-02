@@ -20,7 +20,7 @@ void callback(const sensor_msgs::PointCloudConstPtr& pointcloud)
 	fprintf(fp,"%d %f %f %f\n",npoints,tnow,tstamp,tnow-tstamp);
 	npoints ++;
 
-	ROS_INFO("%d: Image received at %f, delay %f",
+	ROS_INFO("%d: Scan received at %f, delay %f",
 			getpid(),tstamp,tnow-tstamp);
 
 	if (npoints > 1000) {

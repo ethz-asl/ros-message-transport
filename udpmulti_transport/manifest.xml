@@ -1,0 +1,22 @@
+<package>
+  <description brief="udpmulti_transport">
+
+     udpmulti_transport
+
+  </description>
+  <author>Cedric Pradalier</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/udpmulti_transport</url>
+  <depend package="roslib"/> <!-- for testing -->
+  <depend package="message_transport_common"/>
+
+  <export>
+      <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -ludpmulti_transport" cflags="-I${prefix}/include"/>
+  </export>
+
+
+
+</package>
+
+

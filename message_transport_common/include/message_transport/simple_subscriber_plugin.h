@@ -81,7 +81,7 @@ namespace message_transport {
 			/**
 			 * \brief Returns the ros::NodeHandle to be used for parameter lookup.
 			 */
-			const ros::NodeHandle& nh() const
+			ros::NodeHandle& nh() 
 			{
 				return simple_impl_->param_nh_;
 			}
@@ -94,7 +94,7 @@ namespace message_transport {
 				{
 				}
 
-				const ros::NodeHandle param_nh_;
+				ros::NodeHandle param_nh_;
 				ros::Subscriber sub_;
 			};
 

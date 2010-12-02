@@ -27,6 +27,7 @@ namespace message_transport {
 		 class SimplePublisherPlugin : public PublisherPlugin<Base>
 	{
 		public:
+            SimplePublisherPlugin(bool forceLatch = false) : forcelatch_(forceLatch) {}
 			virtual ~SimplePublisherPlugin() {}
 
 			virtual uint32_t getNumSubscribers() const
@@ -66,15 +67,17 @@ namespace message_transport {
 				ros::NodeHandle param_nh(nh, base_topic);
 				simple_impl_.reset(new SimplePublisherPluginImpl(nh,param_nh));
 				simple_impl_->pub_ = nh.advertise<M>(getTopicToAdvertise(base_topic), queue_size,
-						bindCB(user_connect_cb, &SimplePublisherPlugin::connectCallback),
-						bindCB(user_disconnect_cb, &SimplePublisherPlugin::disconnectCallback),
-						tracked_object, latch);
+						bindCB(user_connect_cb, &SimplePublisherPlugin::connectCallbackHandle),
+						bindCB(user_disconnect_cb, &SimplePublisherPlugin::disconnectCallbackHandle),
+						tracked_object, latch | forcelatch_);
 				this->postAdvertiseInit();
 			}
 
 			//! Can be overloaded by an implementation to call some
 			//initialisation function once the node has been initialised
-			virtual void postAdvertiseInit() {}
+			virtual void postAdvertiseInit() {
+                // ROS_WARN("Calling default postAdvertiseInit");
+            }
 
 			//! Generic function for publishing the internal message type.
 			typedef boost::function<void(const M&)> PublishFn;
@@ -88,6 +91,10 @@ namespace message_transport {
 			 * single subscriber publishing (in subscription callbacks).
 			 */
 			virtual void publish(const Base& message, const PublishFn& publish_fn) const = 0;
+
+			void publishInternal(const M& message) const {
+				if (simple_impl_) simple_impl_->pub_.publish(message);
+            }
 
 			/**
 			 * \brief Return the communication topic name for a given base topic.
@@ -105,6 +112,9 @@ namespace message_transport {
 			 * Defaults to noop.
 			 */
 			virtual void connectCallback(const ros::SingleSubscriberPublisher& pub) {}
+			void connectCallbackHandle(const ros::SingleSubscriberPublisher& pub) {
+                this->connectCallback(pub);
+            }
 
 			/**
 			 * \brief Function called when a subscriber disconnects from the internal publisher.
@@ -112,6 +122,9 @@ namespace message_transport {
 			 * Defaults to noop.
 			 */
 			virtual void disconnectCallback(const ros::SingleSubscriberPublisher& pub) {}
+			void disconnectCallbackHandle(const ros::SingleSubscriberPublisher& pub) {
+                this->disconnectCallback(pub);
+            }
 
 			/**
 			 * \brief Returns the ros::NodeHandle to be used for parameter lookup.
@@ -140,6 +153,7 @@ namespace message_transport {
 			};
 
 			boost::scoped_ptr<SimplePublisherPluginImpl> simple_impl_;
+            bool forcelatch_;
 
 			typedef void (SimplePublisherPlugin::*SubscriberStatusMemFn)(const ros::SingleSubscriberPublisher& pub);
 

@@ -15,7 +15,8 @@ class PointCloudPublisher {
 
 		PointCloudPublisher(ros::NodeHandle &n) : n_(n), 
 			it_(n_,"pointcloud_transport","sensor_msgs::PointCloud") {
-			const unsigned int numpoints = 300000;
+			// const unsigned int numpoints = 300000; // to test shared mem
+			const unsigned int numpoints = 361; // to test multicasting
 			pcmsg_pub_ = it_.advertise("pc_source",1);
 			pointcloud.points.resize(numpoints);
 			pointcloud.channels.resize(1);

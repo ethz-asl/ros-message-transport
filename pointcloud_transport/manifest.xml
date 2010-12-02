@@ -11,6 +11,7 @@
   <depend package="pluginlib"/>
   <depend package="message_transport_common"/>
   <depend package="sharedmem_transport"/>
+  <depend package="udpmulti_transport"/>
   <depend package="sensor_msgs"/>
 
   <export>

@@ -1,0 +1,3 @@
+---
+string multicast_address
+udpmulti_transport/UDPMultTopic[] topics
