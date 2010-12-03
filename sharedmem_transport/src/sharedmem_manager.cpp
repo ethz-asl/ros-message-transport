@@ -56,7 +56,7 @@ bool request_memory(sharedmem_transport::SHMRequestMemory::Request &req,
 {
 	boost::lock_guard<boost::mutex> guard(main_mutex);//auto-lock unlock, even on exception
 	if (segment->get_free_memory() < req.size) {
-		ROS_ERROR("Not enough shared memory in the segment (req %d, avail %d)",
+		ROS_ERROR("Not enough shared memory in the segment (req %d, avail %zd)",
 				req.size,segment->get_free_memory());
 		res.handle = 0;
 	} else {
