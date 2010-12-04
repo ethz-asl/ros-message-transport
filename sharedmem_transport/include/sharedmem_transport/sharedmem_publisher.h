@@ -4,8 +4,8 @@
 
 #include <roslib/Header.h>
 #include "message_transport/simple_publisher_plugin.h"
-#include "sharedmem_transport/SharedMemMessage.h"
-#include <boost/interprocess/managed_shared_memory.hpp>
+#include "sharedmem_transport/SharedMemHeader.h"
+#include "sharedmem_transport/SharedMemoryBlock.h"
 
 namespace sharedmem_transport {
 
@@ -15,36 +15,34 @@ namespace sharedmem_transport {
 			SharedmemPublisherImpl();
 			virtual ~SharedmemPublisherImpl();
 
-			void registerServices();
+			uint32_t initialise(const std::string & topic);
 
             void setNodeHandle(ros::NodeHandle & nh) {
                 nh_ = nh;
             }
 
 
-			SharedMemMessage publish_msg(const ros::Message& message, const roslib::Header& header) ;
+			void publish_msg(const ros::Message& message) ;
 		protected:
 			boost::interprocess::managed_shared_memory *segment_ ;
+            SharedMemoryBlock *blockmgr_;
 			bool clientRegistered;
-			ros::ServiceClient registerMemoryClt;
-			ros::ServiceClient requestMemoryClt;
-			ros::ServiceClient releaseMemoryClt;
 
 			// This will be modified after the first image is received, so we
 			// mark them mutable and publish stays "const"
-			uint8_t * ptr_;
-			uint32_t alloc_length_;
-			uint32_t handle_;
+            shm_handle shm_handle_;
             ros::NodeHandle nh_;
 			
 	};
 
 	template <class Base>
 	class SharedmemPublisher : 
-		public message_transport::SimplePublisherPlugin<Base,sharedmem_transport::SharedMemMessage>
+		public message_transport::SimplePublisherPlugin<Base,sharedmem_transport::SharedMemHeader>
 	{
 		public:
-			SharedmemPublisher() {}
+			SharedmemPublisher() : 
+                message_transport::SimplePublisherPlugin<Base,sharedmem_transport::SharedMemHeader>(true), // force latch
+                first_run_(true) {}
 			virtual ~SharedmemPublisher() {}
 
 			virtual std::string getTransportName() const
@@ -58,30 +56,18 @@ namespace sharedmem_transport {
 			}
 
 			virtual void publish(const Base& message,
-					const typename message_transport::SimplePublisherPlugin<Base,sharedmem_transport::SharedMemMessage>::PublishFn& publish_fn) const {
-				publish_fn(impl.publish_msg(message,this->getHeader(message)));
-			}
-
-			virtual roslib::Header getHeader(const Base & message) const {
-				roslib::Header header;
-				header.stamp = ros::Time::now();
-				return header;
+					const typename message_transport::SimplePublisherPlugin<Base,sharedmem_transport::SharedMemHeader>::PublishFn& publish_fn) const {
+                if (first_run_) {
+                    SharedMemHeader header;
+                    header.handle = impl.initialise(this->getTopic());
+                    publish_fn(header);
+                    first_run_ = false;
+                }
+                impl.publish_msg(message);
 			}
 
 			mutable SharedmemPublisherImpl impl;
-			
-	};
-
-	template <class Base>
-	class SharedmemPublisherWithHeader : public SharedmemPublisher<Base>
-	{
-		public:
-			SharedmemPublisherWithHeader() {}
-			virtual ~SharedmemPublisherWithHeader() {}
-
-			virtual roslib::Header getHeader(const Base & message) const {
-				return message.header;
-			}
+            mutable bool first_run_;
 			
 	};
 

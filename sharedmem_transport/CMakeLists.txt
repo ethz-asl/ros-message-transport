@@ -21,15 +21,22 @@ rosbuild_genmsg()
 #uncomment if you have defined services
 rosbuild_gensrv()
 
-# add_definitions(-O0 -g -ggdb)
-
 #common commands for building c++ executables and libraries
-rosbuild_add_library(${PROJECT_NAME} src/sharedmem_publisher.cpp)
+rosbuild_add_library(${PROJECT_NAME} src/sharedmem_publisher.cpp 
+    src/SharedMemoryBlock.cpp src/SharedMemoryBlockDescriptor.cpp)
 
 #target_link_libraries(${PROJECT_NAME} another_library)
 rosbuild_add_boost_directories()
 # rosbuild_link_boost(${PROJECT_NAME} )
 
 rosbuild_add_executable(sharedmem_manager src/sharedmem_manager.cpp)
-target_link_libraries(sharedmem_manager rt)
+target_link_libraries(sharedmem_manager ${PROJECT_NAME})
+
+rosbuild_add_library(test-manifest test/manifest.cpp)
+target_link_libraries(test-manifest ${PROJECT_NAME})
+
+rosbuild_add_executable(test-instantiate test/instantiate.cpp)
+target_link_libraries(test-instantiate ${PROJECT_NAME})
+
+
 

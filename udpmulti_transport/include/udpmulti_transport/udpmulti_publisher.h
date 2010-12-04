@@ -47,7 +47,7 @@ namespace udpmulti_transport {
 		public:
 			UDPMultiPublisher() : 
                 message_transport::SimplePublisherPlugin<Base,udpmulti_transport::UDPMultHeader>(true), // force latch
-				tlast_header_(-1), first_run_(true) {}
+				first_run_(true) {}
 			virtual ~UDPMultiPublisher() {}
 
 			virtual std::string getTransportName() const
@@ -71,7 +71,7 @@ namespace udpmulti_transport {
                 uint32_t datasize;
                 if (first_run_) {
                     impl.initialise(this->getTopic());
-                    this->publishInternal(impl.getUDPHeader());
+                    publish_fn(impl.getUDPHeader());
                     first_run_ = false;
                 }
 
@@ -86,8 +86,6 @@ namespace udpmulti_transport {
 			}
 
 			mutable UDPMultiPublisherImpl impl;
-			uint32_t port_;
-			double tlast_header_;
             mutable bool first_run_;
 			
 	};

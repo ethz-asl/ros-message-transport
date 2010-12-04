@@ -1,4 +1,4 @@
-uint32 handle
+string topic
 ---
 int32 result
 

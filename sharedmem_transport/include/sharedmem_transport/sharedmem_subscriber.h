@@ -1,26 +1,35 @@
 #ifndef SHAREDMEM_MESSAGE_TRANSPORT_SUBSCRIBER_H
 #define SHAREDMEM_MESSAGE_TRANSPORT_SUBSCRIBER_H
 
+#include <boost/bind.hpp>
+#include <boost/thread.hpp>
+#include <boost/interprocess/managed_shared_memory.hpp>
 
 #include <message_transport/simple_subscriber_plugin.h>
 #include <sharedmem_transport/SharedMemoryBlock.h>
-#include <sharedmem_transport/SharedMemMessage.h>
-#include <boost/interprocess/managed_shared_memory.hpp>
+#include <sharedmem_transport/SharedMemHeader.h>
 
 namespace sharedmem_transport {
 
 	template <class Base>
-	class SharedmemSubscriber : public message_transport::SimpleSubscriberPlugin<Base,sharedmem_transport::SharedMemMessage>
+	class SharedmemSubscriber : public message_transport::SimpleSubscriberPlugin<Base,sharedmem_transport::SharedMemHeader>
 	{
 		public:
 			SharedmemSubscriber() {
-				ptr_ = NULL;
 				segment_ = NULL;
-				alloc_length_ = 0;
-				handle_ = 0;
+                blockmgr_ = NULL;
 			}
 
 			virtual ~SharedmemSubscriber() {
+                ROS_INFO("Shutting down SharedmemSubscriber");
+                if (rec_thread_) {
+                    // We probably need to do something to clean up the
+                    // cancelled thread here
+                    rec_thread_->interrupt();
+                    rec_thread_->join();
+                    delete rec_thread_;
+                }
+                rec_thread_ = NULL;
 				delete segment_;
 			}
 
@@ -30,37 +39,38 @@ namespace sharedmem_transport {
 			}
 
 		protected:
-			virtual void internalCallback(const sharedmem_transport::SharedMemMessageConstPtr& message,
-					const typename message_transport::SimpleSubscriberPlugin<Base,sharedmem_transport::SharedMemMessage>::Callback& user_cb)
-			{
+              void receiveThread() {
+                while (ros::ok()) {
+                    blockmgr_->wait_data_and_register_client(shm_handle_);
+                    if (!ros::ok()) break;
 
-				boost::shared_ptr<Base> message_ptr(new Base);
-				if (message->blockid <= 0) {
-					ROS_ERROR("Sharedmem handle is not valid");
-					return;
-				}
-                if (!segment_) {
-                    try {
-                        segment_ = new boost::interprocess::managed_shared_memory(boost::interprocess::open_only,ROSSharedMemoryBlock);
-                    } catch (std::exception e) {
-                        ROS_ERROR("Could not open shared memory segment");
-                        return;
+                    boost::shared_ptr<Base> message_ptr(new Base);
+                    blockmgr_->deserialize<Base>(*segment_,shm_handle_,*message_ptr);
+                    if (user_cb_ && ros::ok()) {
+                        (*user_cb_)(message_ptr);
                     }
+                    blockmgr_->unregister_client(shm_handle_);
                 }
-				ptr_ = (uint8_t*)(segment_->get_address_from_handle(message->blockid));
-				alloc_length_ = message->blocksize;
+            }
 
-				ros::serialization::IStream in(ptr_,alloc_length_);
-				ros::serialization::deserialize(in, *message_ptr);
-
-				user_cb(message_ptr);
+			virtual void internalCallback(const sharedmem_transport::SharedMemHeaderConstPtr& message,
+					const typename message_transport::SimpleSubscriberPlugin<Base,sharedmem_transport::SharedMemHeader>::Callback& user_cb)
+			{
+				user_cb_ = &user_cb;
+                if (!segment_) {
+                    segment_ = new boost::interprocess::managed_shared_memory(boost::interprocess::open_only,ROSSharedMemoryDefaultBlock);
+                    blockmgr_ = (segment_->find<SharedMemoryBlock>("Manager")).first;
+                    shm_handle_ = blockmgr_->allocateBlock(*segment_,this->getTopic().c_str(),0);
+                    rec_thread_ = new  boost::thread(&SharedmemSubscriber::receiveThread,this);
+                }
 			}
 
 
+			const typename message_transport::SimpleSubscriberPlugin<Base,sharedmem_transport::SharedMemHeader>::Callback* user_cb_;
+            boost::thread *rec_thread_;
 			boost::interprocess::managed_shared_memory *segment_ ;
-			uint8_t * ptr_;
-			uint32_t alloc_length_;
-			uint32_t handle_;
+            SharedMemoryBlock *blockmgr_;
+			shm_handle shm_handle_;
 	};
 
 } //namespace transport

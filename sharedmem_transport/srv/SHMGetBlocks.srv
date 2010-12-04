@@ -1,4 +1,2 @@
 ---
-uint32[] blocks
-uint32[] sizes
-uint32[] pids
+sharedmem_transport/SharedMemBlock[] blocks
