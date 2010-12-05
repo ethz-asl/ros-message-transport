@@ -47,17 +47,7 @@ bool get_blocks(sharedmem_transport::SHMGetBlocks::Request &req,
 		sharedmem_transport::SHMGetBlocks::Response &res)
 {
 	boost::lock_guard<boost::mutex> guard(main_mutex);//auto-lock unlock, even on exception
-	unsigned int i=0;
-	res.blocks.clear();
-    for (i=0;i<ROSSharedMemoryNumBlock;i++) {
-        if (!blockmgr->descriptors[i].active_) continue;
-        SharedMemBlock block;
-        block.handle = i;
-        block.size = blockmgr->descriptors[i].size_;
-        block.allocated = blockmgr->descriptors[i].allocated_;
-        block.name = blockmgr->descriptors[i].name_;
-        res.blocks.push_back(block);
-	}
+	res.blocks = blockmgr->getBlockList();
 	return true;
 }
 
@@ -78,14 +68,7 @@ int main(int argc,char *argv[])
             shared_memory_object::remove(name_.c_str()); 
         }
         ~shm_remove(){ 
-            if (blockmgr) {
-                blockmgr->resetAllBlocks(*segment);
-                blockmgr = NULL;
-            }
-            if (segment) {
-                segment->destroy<SharedMemoryBlock>("Manager");
-                segment = NULL;
-            }
+            ROS_INFO("Destroying shared memory object");
             shared_memory_object::remove(name_.c_str()); 
         }
     } remover(segment_name);
@@ -95,6 +78,7 @@ int main(int argc,char *argv[])
    managed_shared_memory managed_shm(create_only, segment_name.c_str(), segment_size);
    segment = &managed_shm;
    blockmgr = segment->find_or_construct<SharedMemoryBlock>("Manager")();
+   ROS_INFO("Created segment %p, and constructed block %p",segment,blockmgr);
 
    ros::ServiceServer releaseMemSrv = n.advertiseService("release_memory",release_memory);
    ros::ServiceServer clearMemSrv = n.advertiseService("clear_memory",clear_memory);
@@ -104,6 +88,21 @@ int main(int argc,char *argv[])
 
    ros::spin();
 
+   ROS_INFO("Exiting from spin, block %p",blockmgr);
+   if (blockmgr) {
+       ROS_INFO("Clearing all shared memory blocks");
+       blockmgr->resetAllBlocks(*segment);
+       blockmgr = NULL;
+   }
+#if 0
+   // This create an abort. Not sure why, but it is not critical since we
+   // destroy the memory segment just after
+   if (segment) {
+       ROS_INFO("Destroying manager");
+       segment->destroy<SharedMemoryBlock>("Manager");
+       segment = NULL;
+   }
+#endif
 }
 
 

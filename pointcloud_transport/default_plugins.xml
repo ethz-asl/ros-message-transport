@@ -16,7 +16,7 @@
   </class>
 
   <class name="sharedmem_pub" 
-		type="sharedmem_transport::SharedmemPublisherWithHeader<sensor_msgs::PointCloud>" 
+		type="sharedmem_transport::SharedmemPublisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
       This is the default publisher. It publishes the objects as-is on the base topic.

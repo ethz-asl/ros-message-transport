@@ -9,6 +9,7 @@
 #include <boost/interprocess/sync/scoped_lock.hpp>
 #include <ros/ros.h>
 #include "sharedmem_transport/SharedMemoryBlockDescriptor.h"
+#include "sharedmem_transport/SharedMemBlock.h"
 
 namespace sharedmem_transport {
 
@@ -26,104 +27,103 @@ namespace sharedmem_transport {
         bool is_valid() const {return ptr != NULL;}
     };
 
-    struct SharedMemoryBlock {
-        //Mutex to protect access to the queue
-        boost::interprocess::interprocess_mutex      mutex;
-        boost::interprocess::interprocess_condition  cond;
-        int32_t num_clients;
+    class SharedMemoryBlock {
+        protected:
+            //Mutex to protect access to the queue
+            boost::interprocess::interprocess_mutex      mutex;
+            boost::interprocess::interprocess_condition  cond;
+            int32_t num_clients;
+            SharedMemoryBlockDescriptor descriptors[ROSSharedMemoryNumBlock];
 
-        SharedMemoryBlock() : num_clients(0) {}
 
-        shm_handle findHandle(boost::interprocess::managed_shared_memory & segment, const char * name) ;
+        public:
 
-        SharedMemoryBlockDescriptor descriptors[ROSSharedMemoryNumBlock];
+            SharedMemoryBlock() : num_clients(0) {}
 
-        shm_handle connectBlock(boost::interprocess::managed_shared_memory & segment, uint32_t handle) ;
+            shm_handle findHandle(boost::interprocess::managed_shared_memory & segment, const char * name) ;
 
-        shm_handle allocateBlock(boost::interprocess::managed_shared_memory & segment, 
-                const char * name, uint32_t size) ;
 
-        void resetBlock(boost::interprocess::managed_shared_memory & segment, shm_handle & shm) ;
-        void resetAllBlocks(boost::interprocess::managed_shared_memory & segment) ;
+            shm_handle allocateBlock(boost::interprocess::managed_shared_memory & segment, 
+                    const char * name, uint32_t size) ;
 
-        void reallocateBlock(boost::interprocess::managed_shared_memory & segment, 
-                shm_handle & shm, uint32_t size) ;
+            void resetBlock(boost::interprocess::managed_shared_memory & segment, shm_handle & shm) ;
+            void resetAllBlocks(boost::interprocess::managed_shared_memory & segment) ;
 
-        void lock_global() {
-            boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> lock(mutex);
-            if (num_clients) {
-                cond.wait(lock);
+            void reallocateBlock(boost::interprocess::managed_shared_memory & segment, 
+                    shm_handle & shm, uint32_t size) ;
+
+            template <class Base>
+                bool wait_data(boost::interprocess::managed_shared_memory & segment,
+                        shm_handle & src, Base & msg) {
+                    {
+                        ROS_DEBUG("Locking %d",src.handle);
+                        boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> 
+                            lock(descriptors[src.handle].mutex); 
+                        descriptors[src.handle].wait_data_and_register_client(lock);
+                        if (!ros::ok()) return false;
+                        register_global_client();
+                        ROS_DEBUG("Unlocking %d",src.handle);
+                    }
+                    deserialize<Base>(segment,src,msg);
+                    unregister_global_client();
+                    ROS_DEBUG("Unregistering %d",src.handle);
+                    descriptors[src.handle].unregister_client();
+                    if (!ros::ok()) return false;
+                    return true;
+                }
+
+            void serialize(boost::interprocess::managed_shared_memory & segment,
+                    shm_handle & dest, const ros::Message & msg) ;
+
+            std::vector<SharedMemBlock> getBlockList() const ;
+        protected:
+
+            template <class Base>
+                void deserialize(boost::interprocess::managed_shared_memory & segment,
+                        shm_handle & src, Base & msg) {
+                    assert(src.handle < ROSSharedMemoryNumBlock);
+                    if (src.resize_count != descriptors[src.handle].resize_count_) {
+                        std::pair<uint8_t *, std::size_t> ret = segment.find<uint8_t>(descriptors[src.handle].name_);
+                        src.resize_count = descriptors[src.handle].resize_count_;
+                        src.ptr = ret.first;
+                    }
+                    ROS_DEBUG("Deserialising from %p, %d bytes",src.ptr,descriptors[src.handle].size_);
+                    ros::serialization::IStream in(src.ptr,descriptors[src.handle].size_);
+                    ros::serialization::deserialize(in, msg);
+                }
+
+            
+            shm_handle connectBlock(boost::interprocess::managed_shared_memory & segment, uint32_t handle) ;
+
+            void check_global_clients(boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> & lock) {
+                if (num_clients) {
+                    ROS_DEBUG("Lock_global wait");
+                    cond.wait(lock);
+                }
+                ROS_DEBUG("Lock_global done");
             }
-        }
-
-        void unlock_global() {
-            mutex.unlock();
-        }
 
 
-        void register_global_client() {
-            boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> lock(mutex); 
-            num_clients ++;
-        }
-
-        void unregister_global_client() {
-            boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> lock(mutex); 
-            num_clients --;
-            assert(num_clients >= 0);
-            if (num_clients == 0) {
-                cond.notify_one();
+            void register_global_client() {
+                ROS_DEBUG("register_global_client:: Locking global");
+                boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> lock(mutex); 
+                num_clients ++;
+                ROS_DEBUG("Registered global client");
             }
-        }
 
-        void lock(const shm_handle & shm) {
-            register_global_client();
-            descriptors[shm.handle].lock();
-        }
-
-        void unlock(const shm_handle & shm) {
-            descriptors[shm.handle].unlock();
-            unregister_global_client();
-        }
-
-
-        void register_client(const shm_handle & shm) {
-            register_global_client();
-            descriptors[shm.handle].register_client();
-        }
-
-        void unregister_client(const shm_handle & shm) {
-            descriptors[shm.handle].unregister_client();
-            unregister_global_client();
-        }
-
-        void wait_data_and_register_client(const shm_handle & shm) {
-            register_global_client();
-            descriptors[shm.handle].wait_data_and_register_client();
-        }
-
-        void signal_data_and_unlock(const shm_handle & shm) {
-            descriptors[shm.handle].signal_data_and_unlock();
-            unregister_global_client();
-        }
-
-
-        template <class Base>
-        void deserialize(boost::interprocess::managed_shared_memory & segment,
-                shm_handle & src, Base & msg) {
-            register_client(src);
-            assert(src.handle < ROSSharedMemoryNumBlock);
-            if (src.resize_count != descriptors[src.handle].resize_count_) {
-                std::pair<uint8_t *, std::size_t> ret = segment.find<uint8_t>(descriptors[src.handle].name_);
-                src.resize_count = descriptors[src.handle].resize_count_;
-                src.ptr = ret.first;
+            void unregister_global_client() {
+                ROS_DEBUG("unregister_global_client:: Locking global");
+                boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> lock(mutex); 
+                num_clients --;
+                assert(num_clients >= 0);
+                if (num_clients == 0) {
+                    ROS_DEBUG("Global lock is free");
+                    cond.notify_all();
+                }
+                ROS_DEBUG("Unregistered global client");
             }
-            ros::serialization::IStream in(src.ptr,descriptors[src.handle].size_);
-            ros::serialization::deserialize(in, msg);
-            unregister_client(src);
-        }
 
-        void serialize(boost::interprocess::managed_shared_memory & segment,
-                shm_handle & dest, const ros::Message & msg) ;
+
     };
 } //namespace image_transport
 

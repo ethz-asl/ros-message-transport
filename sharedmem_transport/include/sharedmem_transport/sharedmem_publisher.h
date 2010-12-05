@@ -58,11 +58,14 @@ namespace sharedmem_transport {
 			virtual void publish(const Base& message,
 					const typename message_transport::SimplePublisherPlugin<Base,sharedmem_transport::SharedMemHeader>::PublishFn& publish_fn) const {
                 if (first_run_) {
+                    ROS_INFO("First publish run");
                     SharedMemHeader header;
                     header.handle = impl.initialise(this->getTopic());
+                    ROS_INFO("Publishing latched header");
                     publish_fn(header);
                     first_run_ = false;
                 }
+                ROS_DEBUG("Publishing shm message");
                 impl.publish_msg(message);
 			}
 

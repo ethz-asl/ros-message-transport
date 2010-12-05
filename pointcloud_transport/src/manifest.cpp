@@ -14,7 +14,7 @@ PLUGINLIB_REGISTER_CLASS(raw_pub, message_transport::RawPublisher<sensor_msgs::P
 PLUGINLIB_REGISTER_CLASS(raw_sub, message_transport::RawSubscriber<sensor_msgs::PointCloud>, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
 
 // Sharedmem class
-PLUGINLIB_REGISTER_CLASS(sharedmem_pub, sharedmem_transport::SharedmemPublisherWithHeader<sensor_msgs::PointCloud>, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
+PLUGINLIB_REGISTER_CLASS(sharedmem_pub, sharedmem_transport::SharedmemPublisher<sensor_msgs::PointCloud>, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
 PLUGINLIB_REGISTER_CLASS(sharedmem_sub, sharedmem_transport::SharedmemSubscriber<sensor_msgs::PointCloud>, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
 
 // Decimated class

@@ -14,7 +14,9 @@ namespace message_transport {
 
 	// using namespace pluginlib;
 
-#define LIST_TRANSPORT(PACKAGE,CLASS) {ListTransport<CLASS> l;l.run(PACKAGE,#CLASS);}
+#define LIST_TRANSPORT(PACKAGE,CLASS) {\
+	ros::init(argc, argv, "list_transport_"PACKAGE); \
+    ListTransport<CLASS> l;l.run(PACKAGE,#CLASS);}
 
 	template <class M>
 		class ListTransport

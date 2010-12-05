@@ -18,10 +18,11 @@ namespace sharedmem_transport {
 			SharedmemSubscriber() {
 				segment_ = NULL;
                 blockmgr_ = NULL;
+                rec_thread_ = NULL;
 			}
 
 			virtual ~SharedmemSubscriber() {
-                ROS_INFO("Shutting down SharedmemSubscriber");
+                ROS_DEBUG("Shutting down SharedmemSubscriber");
                 if (rec_thread_) {
                     // We probably need to do something to clean up the
                     // cancelled thread here
@@ -39,28 +40,31 @@ namespace sharedmem_transport {
 			}
 
 		protected:
-              void receiveThread() {
+            void receiveThread() {
+                ROS_DEBUG("Receive thread running");
                 while (ros::ok()) {
-                    blockmgr_->wait_data_and_register_client(shm_handle_);
-                    if (!ros::ok()) break;
-
+                    ROS_DEBUG("Waiting for data");
                     boost::shared_ptr<Base> message_ptr(new Base);
-                    blockmgr_->deserialize<Base>(*segment_,shm_handle_,*message_ptr);
-                    if (user_cb_ && ros::ok()) {
+                    if (blockmgr_->wait_data(*segment_, shm_handle_, *message_ptr)
+                            && user_cb_ && ros::ok()) {
                         (*user_cb_)(message_ptr);
                     }
-                    blockmgr_->unregister_client(shm_handle_);
                 }
+                ROS_DEBUG("Unregistering client");
             }
 
 			virtual void internalCallback(const sharedmem_transport::SharedMemHeaderConstPtr& message,
 					const typename message_transport::SimpleSubscriberPlugin<Base,sharedmem_transport::SharedMemHeader>::Callback& user_cb)
 			{
 				user_cb_ = &user_cb;
+                ROS_DEBUG("received latched message");
                 if (!segment_) {
                     segment_ = new boost::interprocess::managed_shared_memory(boost::interprocess::open_only,ROSSharedMemoryDefaultBlock);
+                    ROS_DEBUG("Connected to segment");
                     blockmgr_ = (segment_->find<SharedMemoryBlock>("Manager")).first;
-                    shm_handle_ = blockmgr_->allocateBlock(*segment_,this->getTopic().c_str(),0);
+                    ROS_DEBUG("Got block mgr %p",blockmgr_);
+                    shm_handle_ = blockmgr_->findHandle(*segment_,this->getTopic().c_str());
+                    ROS_DEBUG("Got shm handle %p",shm_handle_.ptr);
                     rec_thread_ = new  boost::thread(&SharedmemSubscriber::receiveThread,this);
                 }
 			}
