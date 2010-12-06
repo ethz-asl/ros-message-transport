@@ -1,8 +1,5 @@
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
 
 #include <ros/ros.h>
-#include <cv_bridge/CvBridge.h>
 #include <sensor_msgs/Image.h>
 #include <message_transport/message_transport.h>
 
@@ -19,17 +16,25 @@ void callback(const sensor_msgs::ImageConstPtr& image)
 		sprintf(fname,"received_%d_%s_%dx%dx%s.txt",
 				getpid(),transport.c_str(),image->width,image->height,
 				image->encoding.c_str());
+        for (unsigned int i=0;i<strlen(fname);i++) {
+            if (fname[i]=='/') fname[i] = '_';
+        }
 		ROS_INFO("Saving data in %s",fname);
 		fp = fopen(fname,"w");
 	}
-	fprintf(fp,"%d %f %f %f\n",npoints,tnow,tstamp,tnow-tstamp);
+    if (fp) {
+        fprintf(fp,"%d %f %f %f\n",npoints,tnow,tstamp,tnow-tstamp);
+    }
 	npoints ++;
 
 	ROS_INFO("%d: Image received at %f, delay %f",
 			getpid(),tstamp,tnow-tstamp);
 
 	if (npoints > 1000) {
-		fclose(fp);
+        if (fp) {
+            fclose(fp);
+            fp = NULL;
+        }
 		ros::shutdown();
 	}
 }
@@ -41,7 +46,11 @@ int main(int argc, char** argv)
   message_transport::MessageTransport<sensor_msgs::Image> 
 	  it(nh,"imagem_transport","sensor_msgs::Image");
 
-  transport = std::string((argc > 1) ? argv[1] : "raw");
+  std::string pkgname("imagem_transport");
+  transport = std::string((argc > 1) ? argv[1] : "imagem_transport/raw");
+  if (transport.compare(0,pkgname.length(),pkgname)) {
+      transport = pkgname + "/" + transport;
+  }
   message_transport::Subscriber sub = it.subscribe("image_source", 1, callback, 
 		  transport);
   ROS_INFO("test_receiver started");
