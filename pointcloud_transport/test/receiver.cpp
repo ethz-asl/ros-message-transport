@@ -30,10 +30,10 @@ void callback(const sensor_msgs::PointCloudConstPtr& pointcloud)
 #endif
     npoints ++;
 
-    assert(pointcloud->points.size() == numpoints);
+    assert(pointcloud->points.size() >= numpoints);
     assert(pointcloud->channels.size() == 1);
-    assert(pointcloud->channels[0].values.size() == numpoints);
-    for (i=0;i<numpoints;i++) {
+    assert(pointcloud->channels[0].values.size() >= numpoints);
+    for (i=0;i<pointcloud->points.size();i++) {
         assert(round(pointcloud->points[i].x - i) < 1e-3);
         assert(round(pointcloud->points[i].y - i/10) < 1e-3);
         assert(round(pointcloud->points[i].z - i/100) < 1e-3);

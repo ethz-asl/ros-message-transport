@@ -18,18 +18,7 @@ class PointCloudPublisher {
 
 		PointCloudPublisher(ros::NodeHandle &n) : n_(n), 
 			it_(n_,"pointcloud_transport","sensor_msgs::PointCloud") {
-            unsigned int i;
 			pcmsg_pub_ = it_.advertise("pc_source",1);
-			pointcloud.points.resize(numpoints);
-			pointcloud.channels.resize(1);
-			pointcloud.channels[0].name = "intensity";
-			pointcloud.channels[0].values.resize(numpoints);
-            for (i=0;i<numpoints;i++) {
-                pointcloud.points[i].x = i;
-                pointcloud.points[i].y = i/10;
-                pointcloud.points[i].z = i/100;
-                pointcloud.channels[0].values[i] = i;
-            }
 
 		}
 
@@ -44,8 +33,20 @@ class PointCloudPublisher {
 			ros::Rate loop_rate(3);
 			while (ros::ok())
 			{
-				pointcloud.header.stamp = ros::Time::now();
-                // ROS_DEBUG("Trying to publish");
+                unsigned int i,num;
+                num = numpoints + (rand() % 1000);
+                pointcloud.header.stamp = ros::Time::now();
+                ROS_INFO("Publishing %d points",num);
+                pointcloud.points.resize(num);
+                pointcloud.channels.resize(1);
+                pointcloud.channels[0].name = "intensity";
+                pointcloud.channels[0].values.resize(num);
+                for (i=0;i<num;i++) {
+                    pointcloud.points[i].x = i;
+                    pointcloud.points[i].y = i/10;
+                    pointcloud.points[i].z = i/100;
+                    pointcloud.channels[0].values[i] = i;
+                }
 				pcmsg_pub_.publish(pointcloud);
 				ROS_DEBUG("Published pointcloud at %f",pointcloud.header.stamp.toSec());
 				ros::spinOnce();
