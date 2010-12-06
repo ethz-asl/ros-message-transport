@@ -16,7 +16,6 @@ managed_shared_memory *segment = NULL;
 SharedMemoryBlock *blockmgr= NULL;
 
 
-
 bool release_memory(sharedmem_transport::SHMReleaseMemory::Request &req, 
 		sharedmem_transport::SHMReleaseMemory::Response &res)
 {
