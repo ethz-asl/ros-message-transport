@@ -68,8 +68,8 @@ int main(int argc, char** argv)
 	ros::init(argc, argv, "test_publisher");
 	ros::NodeHandle n;
 	PointCloudPublisher ic(n);
-    setDebugLevel("ros.pointcloud_transport");
-    setDebugLevel("ros.sharedmem_transport");
+    // setDebugLevel("ros.pointcloud_transport");
+    // setDebugLevel("ros.sharedmem_transport");
 	ic.mainloop();
 	return 0;
 }

@@ -59,13 +59,31 @@ namespace sharedmem_transport {
 				user_cb_ = &user_cb;
                 ROS_DEBUG("received latched message");
                 if (!segment_) {
+                    try {
                     segment_ = new boost::interprocess::managed_shared_memory(boost::interprocess::open_only,ROSSharedMemoryDefaultBlock);
                     ROS_DEBUG("Connected to segment");
+                    } catch (boost::interprocess::bad_alloc e) {
+                        segment_ = NULL;
+                        ROS_ERROR("Failed to connect to shared memory segment");
+                        return;
+                    }
                     blockmgr_ = (segment_->find<SharedMemoryBlock>("Manager")).first;
+                    if (!blockmgr_) {
+                        delete segment_;
+                        segment_ = NULL;
+                        ROS_ERROR("Cannot find Manager block in shared memory segment");
+                        return;
+                    }
                     ROS_DEBUG("Got block mgr %p",blockmgr_);
                     shm_handle_ = blockmgr_->findHandle(*segment_,this->getTopic().c_str());
-                    ROS_DEBUG("Got shm handle %p",shm_handle_.ptr);
-                    rec_thread_ = new  boost::thread(&SharedmemSubscriber::receiveThread,this);
+                    if (shm_handle_.is_valid()) {
+                        ROS_DEBUG("Got shm handle %p",shm_handle_.ptr);
+                        rec_thread_ = new  boost::thread(&SharedmemSubscriber::receiveThread,this);
+                    } else {
+                        delete segment_;
+                        segment_ = NULL;
+                        ROS_ERROR("Cannot find memory block for %s", this->getTopic().c_str());
+                    }
                 }
 			}
 

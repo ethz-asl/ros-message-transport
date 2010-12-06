@@ -71,8 +71,8 @@ int main(int argc, char** argv)
             transport);
     ROS_INFO("test_receiver started");
 
-    setDebugLevel("ros.pointcloud_transport");
-    setDebugLevel("ros.sharedmem_transport");
+    // setDebugLevel("ros.pointcloud_transport");
+    // setDebugLevel("ros.sharedmem_transport");
 
     ros::spin();
 }
