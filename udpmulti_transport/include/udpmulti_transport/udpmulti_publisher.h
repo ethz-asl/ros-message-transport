@@ -4,7 +4,6 @@
 #include <boost/asio.hpp>
 
 
-#include <roslib/Header.h>
 #include <message_transport/simple_publisher_plugin.h>
 #include <udpmulti_transport/UDPMultHeader.h>
 
