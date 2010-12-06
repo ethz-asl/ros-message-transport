@@ -10,18 +10,18 @@
 #include <sensor_msgs/PointCloud.h>
 
 // Raw class
-PLUGINLIB_REGISTER_CLASS(raw_pub, message_transport::RawPublisher<sensor_msgs::PointCloud>, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
-PLUGINLIB_REGISTER_CLASS(raw_sub, message_transport::RawSubscriber<sensor_msgs::PointCloud>, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
+PLUGINLIB_DECLARE_CLASS(pointcloud_transport,raw_pub, message_transport::RawPublisher<sensor_msgs::PointCloud>, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
+PLUGINLIB_DECLARE_CLASS(pointcloud_transport,raw_sub, message_transport::RawSubscriber<sensor_msgs::PointCloud>, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
 
 // Sharedmem class
-PLUGINLIB_REGISTER_CLASS(sharedmem_pub, sharedmem_transport::SharedmemPublisher<sensor_msgs::PointCloud>, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
-PLUGINLIB_REGISTER_CLASS(sharedmem_sub, sharedmem_transport::SharedmemSubscriber<sensor_msgs::PointCloud>, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
+PLUGINLIB_DECLARE_CLASS(pointcloud_transport,sharedmem_pub, sharedmem_transport::SharedmemPublisher<sensor_msgs::PointCloud>, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
+PLUGINLIB_DECLARE_CLASS(pointcloud_transport,sharedmem_sub, sharedmem_transport::SharedmemSubscriber<sensor_msgs::PointCloud>, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
 
 // Decimated class
-PLUGINLIB_REGISTER_CLASS(decimated_pub, decimated_transport::DecimatedPublisher, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
-PLUGINLIB_REGISTER_CLASS(decimated_sub, decimated_transport::DecimatedSubscriber, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
+PLUGINLIB_DECLARE_CLASS(pointcloud_transport,decimated_pub, decimated_transport::DecimatedPublisher, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
+PLUGINLIB_DECLARE_CLASS(pointcloud_transport,decimated_sub, decimated_transport::DecimatedSubscriber, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
 
 // UDP multi-casting class
-PLUGINLIB_REGISTER_CLASS(udpmulti_pub, udpmulti_transport::UDPMultiPublisher<sensor_msgs::PointCloud>, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
-PLUGINLIB_REGISTER_CLASS(udpmulti_sub, udpmulti_transport::UDPMultiSubscriber<sensor_msgs::PointCloud>, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
+PLUGINLIB_DECLARE_CLASS(pointcloud_transport,udpmulti_pub, udpmulti_transport::UDPMultiPublisher<sensor_msgs::PointCloud>, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
+PLUGINLIB_DECLARE_CLASS(pointcloud_transport,udpmulti_sub, udpmulti_transport::UDPMultiSubscriber<sensor_msgs::PointCloud>, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
 

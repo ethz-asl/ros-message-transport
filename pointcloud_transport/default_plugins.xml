@@ -1,5 +1,5 @@
 <library path="lib/libpointcloud_transport">
-	<class name="raw_pub" 
+    <class name="pointcloud_transport/raw_pub" 
 		type="message_transport::RawPublisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -7,7 +7,7 @@
     </description>
   </class>
 
-  <class name="raw_sub" 
+  <class name="pointcloud_transport/raw_sub" 
 		type="message_transport::RawSubscriber<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -15,7 +15,7 @@
     </description>
   </class>
 
-  <class name="sharedmem_pub" 
+  <class name="pointcloud_transport/sharedmem_pub" 
 		type="sharedmem_transport::SharedmemPublisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -23,7 +23,7 @@
     </description>
   </class>
 
-  <class name="sharedmem_sub" 
+  <class name="pointcloud_transport/sharedmem_sub" 
 		type="sharedmem_transport::SharedmemSubscriber<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -32,7 +32,7 @@
   </class>
 
 
-  <class name="decimated_pub" 
+  <class name="pointcloud_transport/decimated_pub" 
 		type="decimated_transport::DecimatedPublisher" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -40,7 +40,7 @@
     </description>
   </class>
 
-  <class name="decimated_sub" 
+  <class name="pointcloud_transport/decimated_sub" 
 		type="decimated_transport::DecimatedSubscriber" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -48,7 +48,7 @@
     </description>
   </class>
 
-  <class name="udpmulti_pub" 
+  <class name="pointcloud_transport/udpmulti_pub" 
 		type="udpmulti_transport::UDPMultiPublisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -57,7 +57,7 @@
     </description>
   </class>
 
-  <class name="udpmulti_sub" 
+  <class name="pointcloud_transport/udpmulti_sub" 
 		type="udpmulti_transport::UDPMultiSubscriber<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>

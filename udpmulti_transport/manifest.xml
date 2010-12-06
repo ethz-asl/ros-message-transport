@@ -8,7 +8,7 @@
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/udpmulti_transport</url>
-  <depend package="roslib"/> <!-- for testing -->
+  <depend package="std_msgs"/> <!-- for testing -->
   <depend package="message_transport_common"/>
 
   <export>

@@ -28,9 +28,9 @@ rosbuild_add_library(${PROJECT_NAME} src/udpmulti_publisher.cpp)
 #target_link_libraries(${PROJECT_NAME} another_library)
 #rosbuild_add_boost_directories()
 #rosbuild_link_boost(${PROJECT_NAME} thread)
-# rosbuild_add_library(test-manifest test/manifest.cpp)
-# target_link_libraries(test-manifest ${PROJECT_NAME})
-# 
+rosbuild_add_library(test-manifest test/manifest.cpp)
+target_link_libraries(test-manifest ${PROJECT_NAME})
+ 
 # rosbuild_add_executable(test-instantiate test/instantiate.cpp)
 # target_link_libraries(test-instantiate ${PROJECT_NAME})
 # 

@@ -65,8 +65,11 @@ int main(int argc, char** argv)
 
     message_transport::MessageTransport<sensor_msgs::PointCloud> 
         it(nh,"pointcloud_transport","sensor_msgs::PointCloud");
-
-    transport = std::string((argc > 1) ? argv[1] : "raw");
+    std::string pkgname("pointcloud_transport");
+    transport = std::string((argc > 1) ? argv[1] : "pointcloud_transport/raw");
+    if (transport.compare(0,pkgname.length(),pkgname)) {
+        transport = pkgname + "/" + transport;
+    }
     message_transport::Subscriber sub = it.subscribe("pc_source", 1, callback, 
             transport);
     ROS_INFO("test_receiver started");

@@ -1,5 +1,5 @@
 <library path="lib/libcompressed_imagem_transport">
-	<class name="compressed_pub" 
+    <class name="compressed_imagem_transport/compressed_pub" 
 		type="compressed_imagem_transport::CompressedPublisher" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
     <description>
@@ -7,7 +7,7 @@
     </description>
   </class>
 
-  <class name="compressed_sub" 
+  <class name="compressed_imagem_transport/compressed_sub" 
 		type="compressed_imagem_transport::CompressedSubscriber" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
     <description>

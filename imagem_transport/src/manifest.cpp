@@ -6,9 +6,9 @@
 #include <sensor_msgs/Image.h>
 
 // Raw class
-PLUGINLIB_REGISTER_CLASS(raw_pub, message_transport::RawPublisher<sensor_msgs::Image>, message_transport::PublisherPlugin<sensor_msgs::Image>)
-PLUGINLIB_REGISTER_CLASS(raw_sub, message_transport::RawSubscriber<sensor_msgs::Image>, message_transport::SubscriberPlugin<sensor_msgs::Image>)
+PLUGINLIB_DECLARE_CLASS(imagem_transport,raw_pub, message_transport::RawPublisher<sensor_msgs::Image>, message_transport::PublisherPlugin<sensor_msgs::Image>)
+PLUGINLIB_DECLARE_CLASS(imagem_transport,raw_sub, message_transport::RawSubscriber<sensor_msgs::Image>, message_transport::SubscriberPlugin<sensor_msgs::Image>)
 
 // Sharedmem class
-PLUGINLIB_REGISTER_CLASS(sharedmem_pub, sharedmem_transport::SharedmemPublisher<sensor_msgs::Image>, message_transport::PublisherPlugin<sensor_msgs::Image>)
-PLUGINLIB_REGISTER_CLASS(sharedmem_sub, sharedmem_transport::SharedmemSubscriber<sensor_msgs::Image>, message_transport::SubscriberPlugin<sensor_msgs::Image>)
+PLUGINLIB_DECLARE_CLASS(imagem_transport,sharedmem_pub, sharedmem_transport::SharedmemPublisher<sensor_msgs::Image>, message_transport::PublisherPlugin<sensor_msgs::Image>)
+PLUGINLIB_DECLARE_CLASS(imagem_transport,sharedmem_sub, sharedmem_transport::SharedmemSubscriber<sensor_msgs::Image>, message_transport::SubscriberPlugin<sensor_msgs::Image>)
