@@ -60,7 +60,11 @@ namespace sharedmem_transport {
                         boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> 
                             lock(descriptors[src.handle].mutex); 
                         descriptors[src.handle].wait_data_and_register_client(lock);
-                        if (!ros::ok()) return false;
+                        if (!ros::ok()) {
+                            lock.unlock();
+                            descriptors[src.handle].unregister_client();
+                            return false;
+                        }
                         register_global_client();
                         ROS_DEBUG("Unlocking %d",src.handle);
                     }
