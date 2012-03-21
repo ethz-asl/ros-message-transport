@@ -1,0 +1,51 @@
+<library path="lib/libstring_transport">
+    <class name="string_transport/raw_pub" 
+		type="message_transport::RawPublisher<std_msgs::String>" 
+		base_class_type="message_transport::PublisherPlugin<std_msgs::String>">
+    <description>
+      This is the default publisher. It publishes the objects as-is on the base topic.
+    </description>
+  </class>
+
+  <class name="string_transport/raw_sub" 
+		type="message_transport::RawSubscriber<std_msgs::String>" 
+		base_class_type="message_transport::SubscriberPlugin<std_msgs::String>">
+    <description>
+      This is the default pass-through subscriber for topics of type string
+    </description>
+  </class>
+
+  <class name="string_transport/sharedmem_pub" 
+		type="sharedmem_transport::SharedmemPublisher<std_msgs::String>" 
+		base_class_type="message_transport::PublisherPlugin<std_msgs::String>">
+    <description>
+      This is the default publisher. It publishes the objects as-is on the base topic.
+    </description>
+  </class>
+
+  <class name="string_transport/sharedmem_sub" 
+		type="sharedmem_transport::SharedmemSubscriber<std_msgs::String>" 
+		base_class_type="message_transport::SubscriberPlugin<std_msgs::String>">
+    <description>
+      This is the default pass-through subscriber for topics of type string
+    </description>
+  </class>
+
+
+  <class name="string_transport/udpmulti_pub" 
+		type="udpmulti_transport::UDPMultiPublisher<std_msgs::String>" 
+		base_class_type="message_transport::PublisherPlugin<std_msgs::String>">
+    <description>
+        This publisher published this string as UDP multicast telegram. 
+        Size is limited to 8092 bytes
+    </description>
+  </class>
+
+  <class name="string_transport/udpmulti_sub" 
+		type="udpmulti_transport::UDPMultiSubscriber<std_msgs::String>" 
+		base_class_type="message_transport::SubscriberPlugin<std_msgs::String>">
+    <description>
+        This subscriber subscribes to string UDP multicast telegrams. 
+    </description>
+  </class>
+</library>
