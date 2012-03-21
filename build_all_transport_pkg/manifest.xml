@@ -1,0 +1,22 @@
+<package>
+  <description brief="build_all_transport_pkg">
+
+     build_all_transport_pkg
+
+  </description>
+  <author>Cedric Pradalier</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/build_all_transport_pkg</url>
+  <depend package="compressed_imagem_transport"/>
+  <depend package="imagem_transport"/>
+  <depend package="message_transport_common"/>
+  <depend package="pointcloud_transport"/>
+  <depend package="sharedmem_transport"/>
+  <depend package="string_transport"/>
+  <depend package="theora_imagem_transport"/>
+  <depend package="udpmulti_transport"/>
+
+</package>
+
+
