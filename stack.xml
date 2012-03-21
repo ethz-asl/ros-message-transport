@@ -4,10 +4,10 @@
   <license>BSD</license>  
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/ethzasl_message_transport</url>
-  <depend stack="common" /> <!-- pluginlib -->
   <depend stack="common_msgs" /> <!-- sensor_msgs -->
-  <depend stack="image_transport_plugins" /> <!-- libtheora -->
-  <depend stack="ros" /> <!-- message_filters -->
+  <depend stack="pluginlib" /> <!-- pluginlib -->
+  <depend stack="ros" />
+  <depend stack="ros_comm" /> <!-- std_msgs, message_filters -->
   <depend stack="vision_opencv" /> <!-- opencv2, cv_bridge -->
 
 </stack>
