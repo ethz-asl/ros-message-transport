@@ -2,7 +2,7 @@
 #define SHAREDMEM_TRANSPORT_PUBLISHER_H
 
 
-#include <roslib/Header.h>
+#include <std_msgs/Header.h>
 #include "message_transport/simple_publisher_plugin.h"
 #include "sharedmem_transport/SharedMemHeader.h"
 #include "sharedmem_transport/SharedMemoryBlock.h"
@@ -22,7 +22,19 @@ namespace sharedmem_transport {
             }
 
 
-			void publish_msg(const ros::Message& message) ;
+            template <class M>
+			void publish_msg(const M& message) {
+                uint32_t serlen = ros::serialization::serializationLength(message);
+
+                if (!shm_handle_.is_valid()) {
+                    ROS_DEBUG("Ignoring publish request on an invalid handle");
+                    return;
+                }
+                blockmgr_->reallocateBlock(*segment_,shm_handle_,serlen);
+                if (shm_handle_.is_valid()) { // check again, in case reallocate failed
+                    blockmgr_->serialize(*segment_,shm_handle_,message);
+                }
+            }
 		protected:
 			boost::interprocess::managed_shared_memory *segment_ ;
             SharedMemoryBlock *blockmgr_;

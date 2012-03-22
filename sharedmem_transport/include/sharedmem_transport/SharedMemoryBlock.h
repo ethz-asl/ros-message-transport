@@ -78,8 +78,30 @@ namespace sharedmem_transport {
                     return true;
                 }
 
+            template <class M>
             void serialize(boost::interprocess::managed_shared_memory & segment,
-                    shm_handle & dest, const ros::Message & msg) ;
+                    shm_handle & dest, const M & msg) {
+                boost::interprocess::scoped_lock<boost::interprocess::interprocess_mutex> lock(descriptors[dest.handle].mutex);
+                ROS_DEBUG("serialize: locked %d, checking clients",dest.handle);
+                descriptors[dest.handle].check_clients(lock);
+                ROS_DEBUG("serialize: locked %d, clients checked",dest.handle);
+                register_global_client();
+                ROS_DEBUG("serialize: global clients checked");
+
+                assert(dest.handle < ROSSharedMemoryNumBlock);
+                if (dest.resize_count != descriptors[dest.handle].resize_count_) {
+                    std::pair<uint8_t *, std::size_t> ret = segment.find<uint8_t>(descriptors[dest.handle].name_);
+                    dest.resize_count = descriptors[dest.handle].resize_count_;
+                    dest.ptr = ret.first;
+                }
+                ROS_DEBUG("Serialising to %p, %d bytes",dest.ptr,descriptors[dest.handle].size_);
+                ros::serialization::OStream out(dest.ptr,descriptors[dest.handle].size_);
+                ros::serialization::serialize(out, msg);
+                unregister_global_client();
+                ROS_DEBUG("serialize: global clients released");
+                descriptors[dest.handle].signal_data();
+                ROS_DEBUG("serialize: unlocking %d",dest.handle);
+            }
 
             std::vector<SharedMemBlock> getBlockList() const ;
         protected:

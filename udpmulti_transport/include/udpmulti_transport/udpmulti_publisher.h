@@ -27,7 +27,23 @@ namespace udpmulti_transport {
 
 			UDPMultHeader getUDPHeader() const;
 
-			void multicast(const ros::Message & message,uint32_t datasize=0);
+            template <class M>
+			void multicast(const M & message,uint32_t datasize=0) {
+                uint8_t buffer[MAX_UDP_PACKET_SIZE];
+                if (!datasize) {
+                    datasize = ros::serialization::serializationLength(message);
+                }
+                assert(datasize < MAX_UDP_PACKET_SIZE);
+                assert(socket_);
+                assert(endpoint_);
+
+                ros::serialization::OStream out(buffer,datasize);
+                ros::serialization::serialize(out,message);
+
+                // ROS_INFO("Sending datagram");
+                socket_-> send_to(boost::asio::buffer(buffer, datasize),*endpoint_);
+                io_service_.poll();
+            }
 		protected:
 			
 			uint32_t port_;
