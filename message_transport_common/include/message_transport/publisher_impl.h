@@ -119,8 +119,9 @@ namespace message_transport {
 			virtual uint32_t getNumSubscribers() const
 			{
 				uint32_t count = 0;
-				BOOST_FOREACH(const PublisherPlugin<M>& pub, publishers_)
-					count += pub.getNumSubscribers();
+                for (unsigned int i=0;i<publishers_.size();i++) {
+					count += publishers_[i]->getNumSubscribers();
+                }
 				return count;
 			}
 
@@ -128,8 +129,9 @@ namespace message_transport {
 			{
 				if (!unadvertised_) {
 					unadvertised_ = true;
-					BOOST_FOREACH(PublisherPlugin<M>& pub, publishers_)
-						pub.shutdown();
+                    for (unsigned int i=0;i<publishers_.size();i++) {
+						publishers_[i]->shutdown();
+                    }
 					publishers_.clear();
 				}
 			}
@@ -138,8 +140,12 @@ namespace message_transport {
 				return loader_.getDeclaredClasses();
 			}
 
-			PublisherPlugin<M> * addInstance(const std::string & name) {
-				PublisherPlugin<M> * pub = loader_.createClassInstance(name);
+            boost::shared_ptr< PublisherPlugin<M> > addInstance(const std::string & name) {
+#if ROS_VERSION_MINIMUM(1, 7, 0) // if current ros version is >= 1.7.0
+                boost::shared_ptr< PublisherPlugin<M> > pub = loader_.createInstance(name);
+#else
+                boost::shared_ptr< PublisherPlugin<M> > pub(loader_.createClassInstance(name));
+#endif
 				publishers_.push_back(pub);
 				return pub;
 			}
@@ -149,23 +155,23 @@ namespace message_transport {
 			}
 
 			void publish(const M& message) const {
-				BOOST_FOREACH(const PublisherPlugin<M>& pub, publishers_) {
-					if (pub.getNumSubscribers() > 0) {
-						pub.publish(message);
+                for (unsigned int i=0;i<publishers_.size();i++) {
+					if (publishers_[i]->getNumSubscribers() > 0) {
+						publishers_[i]->publish(message);
 					}
 				}
 			}
 
 			void publish(const typename M::ConstPtr& message) const {
-				BOOST_FOREACH(const PublisherPlugin<M>& pub, publishers_) {
-					if (pub.getNumSubscribers() > 0) {
-						pub.publish(message);
+                for (unsigned int i=0;i<publishers_.size();i++) {
+					if (publishers_[i]->getNumSubscribers() > 0) {
+						publishers_[i]->publish(message);
 					}
 				}
 			}
 		protected:
 			pluginlib::ClassLoader< PublisherPlugin<M> > loader_;
-			boost::ptr_vector< PublisherPlugin<M> > publishers_;
+            std::vector<boost::shared_ptr< PublisherPlugin<M> > > publishers_;
 	};
 
 	template <class M>

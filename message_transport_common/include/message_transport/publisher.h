@@ -130,7 +130,7 @@ namespace message_transport {
 
 					BOOST_FOREACH(const std::string& lookup_name, impl->getDeclaredClasses()) {
 						try {
-							PublisherPlugin<M>* pub = impl->addInstance(lookup_name);
+                            boost::shared_ptr< PublisherPlugin<M> > pub = impl->addInstance(lookup_name);
 							pub->advertise(nh, impl->getTopic(), queue_size, 
 									rebindCB<M>(connect_cb),
 									rebindCB<M>(disconnect_cb), 

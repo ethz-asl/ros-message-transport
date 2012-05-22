@@ -57,9 +57,17 @@ namespace message_transport {
 						transports[transport_name].pub_name = lookup_name;
 						transports[transport_name].package_name = pub_loader.getClassPackage(lookup_name);
 						try {
-							PublisherPlugin<M> * pub = pub_loader.createClassInstance(lookup_name);
+#if ROS_VERSION_MINIMUM(1, 7, 0) // if current ros version is >= 1.7.0
+                            // Fuerte code
+                            boost::shared_ptr< PublisherPlugin<M> > pub = pub_loader.createInstance(lookup_name);
 							transports[transport_name].pub_status = SUCCESS;
-							delete pub;
+                            pub.reset();
+#else
+                            // Electric or less
+                            PublisherPlugin<M> *pub = pub_loader.createClassInstance(lookup_name);
+							transports[transport_name].pub_status = SUCCESS;
+                            pub->shutdown();
+#endif
 						}
 						catch (const pluginlib::LibraryLoadException& e) {
 							transports[transport_name].pub_status = LIB_LOAD_FAILURE;
@@ -74,9 +82,16 @@ namespace message_transport {
 						transports[transport_name].sub_name = lookup_name;
 						transports[transport_name].package_name = sub_loader.getClassPackage(lookup_name);
 						try {
-							SubscriberPlugin<M> * sub = sub_loader.createClassInstance(lookup_name);
+#if ROS_VERSION_MINIMUM(1, 7, 0) // if current ros version is >= 1.7.0
+                            boost::shared_ptr< SubscriberPlugin<M> > sub = sub_loader.createInstance(lookup_name);
 							transports[transport_name].sub_status = SUCCESS;
-							delete sub;
+                            sub.reset();
+#else
+                            // Electric or less
+                            SubscriberPlugin<M> *sub = sub_loader.createClassInstance(lookup_name);
+							transports[transport_name].sub_status = SUCCESS;
+                            sub->shutdown();
+#endif
 						}
 						catch (const pluginlib::LibraryLoadException& e) {
 							transports[transport_name].sub_status = LIB_LOAD_FAILURE;
@@ -86,7 +101,6 @@ namespace message_transport {
 						}
 					}
 
-					bool problem_package = false;
 					printf("Declared transports:\n");
 					BOOST_FOREACH(const typename StatusMap::value_type& value, transports) {
 						const TransportDesc& td = value.second;
@@ -94,14 +108,9 @@ namespace message_transport {
 						if ((td.pub_status == CREATE_FAILURE || td.pub_status == LIB_LOAD_FAILURE) ||
 								(td.sub_status == CREATE_FAILURE || td.sub_status == LIB_LOAD_FAILURE)) {
 							printf(" (*): Not available. Try 'rosmake %s'.", td.package_name.c_str());
-							problem_package = true;
 						}
 						printf("\n");
 					}
-#if 0
-					if (problem_package)
-						printf("(*) \n");
-#endif
 
 					printf("\nDetails:\n");
 					BOOST_FOREACH(const typename StatusMap::value_type& value, transports) {

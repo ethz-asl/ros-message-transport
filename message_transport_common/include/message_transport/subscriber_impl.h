@@ -60,11 +60,11 @@ namespace message_transport {
 				this->shutdownImpl();
 			}
 			virtual void shutdownImpl() = 0;
-			virtual SubscriberPluginGen * getSubscriber() = 0;
+			virtual boost::shared_ptr< SubscriberPluginGen > getSubscriber() = 0;
 
 			template <class M> 
-				SubscriberPlugin<M> * getTemplateSubscriber() {
-					return dynamic_cast<SubscriberPlugin<M>*>(getSubscriber());
+				boost::shared_ptr< SubscriberPlugin<M> > getTemplateSubscriber() {
+                    return boost::dynamic_pointer_cast< SubscriberPlugin<M> >(getSubscriber());
 				}
 
 
@@ -80,12 +80,10 @@ namespace message_transport {
 		public:
 			SubscriberImpl(const std::string & packageName,const std::string & className)
 				: loader_(packageName, 
-						std::string("message_transport::SubscriberPlugin<")+className+">"),
-				subscriber_(NULL) { }
+						std::string("message_transport::SubscriberPlugin<")+className+">") { }
 
 			~SubscriberImpl() {
 				shutdownImpl();
-				delete subscriber_; 
 			}
 
 			virtual void shutdownImpl()
@@ -98,11 +96,14 @@ namespace message_transport {
 
 			virtual void reset(const TransportHints& transport_hints) {
 				std::string lookup_name = SubscriberPluginGen::getLookupName(transport_hints.getTransport());
-				delete subscriber_;
-				subscriber_ = loader_.createClassInstance(lookup_name);
+#if ROS_VERSION_MINIMUM(1, 7, 0) // if current ros version is >= 1.7.0
+				subscriber_ = loader_.createInstance(lookup_name);
+#else
+				subscriber_.reset(loader_.createClassInstance(lookup_name));
+#endif
 			}
 
-			virtual SubscriberPluginGen * getSubscriber() {
+			virtual boost::shared_ptr< SubscriberPluginGen > getSubscriber() {
 				return subscriber_;
 			}
 
@@ -113,7 +114,7 @@ namespace message_transport {
 		protected:
 
 			pluginlib::ClassLoader< SubscriberPlugin<M> > loader_;
-			SubscriberPlugin<M>* subscriber_;
+            boost::shared_ptr< SubscriberPlugin<M> > subscriber_;
 	};
 };
 
