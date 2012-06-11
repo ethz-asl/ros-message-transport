@@ -23,19 +23,21 @@ namespace bz2_transport {
         out.buffer.resize(destLen);
         // Could use memcpy, but probably less portable
         memcpy(&(out.buffer.front()),buf.get(),destLen);
-        printf("Message compression: from %d to %d bytes\n",len,destLen);
+        printf("Message compression: from %d to %d bytes\n",(int)len,(int)destLen);
         return true;
     }
 
     bool BZ2Codec::decompress(const BZ2Packet & in, 
             boost::shared_array<uint8_t> &buffer, size_t &len) const {
         int ret = 0;
+        unsigned int destLen;
         buffer.reset(new uint8_t[in.original_length]);
-        ret = BZ2_bzBuffToBuffDecompress((char*)buffer.get(),&len, (char*)&(in.buffer.front()), in.buffer.size(), 0, 0);
+        ret = BZ2_bzBuffToBuffDecompress((char*)buffer.get(),&destLen, (char*)&(in.buffer.front()), in.buffer.size(), 0, 0);
         if (ret != BZ_OK) {
             ROS_ERROR("BZ2_bzBuffToBuffDecompress return %d",ret);
             return false;
         }
+        len = destLen;
         return true;
     }
 
