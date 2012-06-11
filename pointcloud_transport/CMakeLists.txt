@@ -18,14 +18,8 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 find_library(LOG4CXX_LIBRARY log4cxx)
 
-#uncomment if you have defined messages
-#rosbuild_genmsg()
-#uncomment if you have defined services
-#rosbuild_gensrv()
-
 rosbuild_add_boost_directories()
-rosbuild_add_library(${PROJECT_NAME} src/manifest.cpp
-	src/decimated_publisher.cpp)
+rosbuild_add_library(${PROJECT_NAME} src/decimated_publisher.cpp src/manifest.cpp)
 rosbuild_link_boost(${PROJECT_NAME} system)
 
 rosbuild_add_executable(list_transports src/list_transports.cpp)
@@ -36,6 +30,11 @@ target_link_libraries(test_publisher ${PROJECT_NAME} ${LOG4CXX_LIBRARY})
 
 rosbuild_add_executable(test_receiver test/receiver.cpp)
 target_link_libraries(test_receiver ${PROJECT_NAME} ${LOG4CXX_LIBRARY})
+
+#uncomment if you have defined messages
+#rosbuild_genmsg()
+#uncomment if you have defined services
+#rosbuild_gensrv()
 
 #common commands for building c++ executables and libraries
 #rosbuild_add_library(${PROJECT_NAME} src/example.cpp)

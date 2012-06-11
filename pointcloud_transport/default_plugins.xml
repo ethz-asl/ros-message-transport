@@ -64,4 +64,21 @@
         This subscriber subscribes to point cloud UDP multicast telegrams. 
     </description>
   </class>
+
+  <class name="pointcloud_transport/bz2_pub" 
+		type="bz2_transport::BZ2Publisher<sensor_msgs::PointCloud>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
+    <description>
+        This publisher published this point cloud as BZ2 compressed binary
+        blobs
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/bz2_sub" 
+		type="bz2_transport::BZ2Subscriber<sensor_msgs::PointCloud>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
+    <description>
+        This subscriber subscribes to point cloud BZ2 binary blobs
+    </description>
+  </class>
 </library>

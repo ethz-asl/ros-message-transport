@@ -5,6 +5,8 @@
 #include <sharedmem_transport/sharedmem_subscriber.h>
 #include <udpmulti_transport/udpmulti_publisher.h>
 #include <udpmulti_transport/udpmulti_subscriber.h>
+#include <bz2_transport/bz2_publisher.h>
+#include <bz2_transport/bz2_subscriber.h>
 #include <pointcloud_transport_base/decimated_publisher.h>
 #include <pointcloud_transport_base/decimated_subscriber.h>
 #include <sensor_msgs/PointCloud.h>
@@ -24,4 +26,8 @@ PLUGINLIB_DECLARE_CLASS(pointcloud_transport,decimated_sub, decimated_transport:
 // UDP multi-casting class
 PLUGINLIB_DECLARE_CLASS(pointcloud_transport,udpmulti_pub, udpmulti_transport::UDPMultiPublisher<sensor_msgs::PointCloud>, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
 PLUGINLIB_DECLARE_CLASS(pointcloud_transport,udpmulti_sub, udpmulti_transport::UDPMultiSubscriber<sensor_msgs::PointCloud>, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
+
+// BZ2 compression class
+PLUGINLIB_DECLARE_CLASS(pointcloud_transport,bz2_pub, bz2_transport::BZ2Publisher<sensor_msgs::PointCloud>, message_transport::PublisherPlugin<sensor_msgs::PointCloud>)
+PLUGINLIB_DECLARE_CLASS(pointcloud_transport,bz2_sub, bz2_transport::BZ2Subscriber<sensor_msgs::PointCloud>, message_transport::SubscriberPlugin<sensor_msgs::PointCloud>)
 
