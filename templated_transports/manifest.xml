@@ -21,6 +21,7 @@
     <!-- This causes this cmake directory to be available to depending packages -->
     <rosbuild cmake_directory="${prefix}/cmake"/>
   </export>
+  <rosdep name="m4"/>
 </package>
 
 

@@ -16,6 +16,7 @@
   </export>
 
 
+  <rosdep name="libbz2-dev"/>
 
 </package>
 
