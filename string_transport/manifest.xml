@@ -8,10 +8,9 @@
   <license>BSD</license>
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/string_transport</url>
-    <depend package="pluginlib"/>
+  <depend package="pluginlib"/>
   <depend package="message_transport_common"/>
-  <depend package="sharedmem_transport"/>
-  <depend package="udpmulti_transport"/>
+  <depend package="templated_transports"/>
   <depend package="std_msgs"/>
 
 

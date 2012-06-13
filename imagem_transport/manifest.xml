@@ -11,7 +11,7 @@
   <url>http://ros.org/wiki/imagem_transport</url>
   <depend package="pluginlib"/>
   <depend package="message_transport_common"/>
-  <depend package="sharedmem_transport"/>
+  <depend package="templated_transports"/>
   <depend package="sensor_msgs"/>
   <depend package="opencv2"/>
   <depend package="cv_bridge"/>

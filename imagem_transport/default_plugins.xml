@@ -1,5 +1,9 @@
+
+
+
 <library path="lib/libimagem_transport">
-    <class name="imagem_transport/raw_pub" 
+    
+    <class name="imagem_transport/raw_pub_img" 
 		type="message_transport::RawPublisher<sensor_msgs::Image>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
     <description>
@@ -7,15 +11,15 @@
     </description>
   </class>
 
-  <class name="imagem_transport/raw_sub" 
+  <class name="imagem_transport/raw_sub_img" 
 		type="message_transport::RawSubscriber<sensor_msgs::Image>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
     <description>
-      This is the default pass-through subscriber for topics of type Image
+      This is the default pass-through subscriber for topics of type PointCloud
     </description>
   </class>
 
-  <class name="imagem_transport/sharedmem_pub" 
+  <class name="imagem_transport/sharedmem_pub_img" 
 		type="sharedmem_transport::SharedmemPublisher<sensor_msgs::Image>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
     <description>
@@ -23,11 +27,47 @@
     </description>
   </class>
 
-  <class name="imagem_transport/sharedmem_sub" 
+  <class name="imagem_transport/sharedmem_sub_img" 
 		type="sharedmem_transport::SharedmemSubscriber<sensor_msgs::Image>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
     <description>
-      This is the default pass-through subscriber for topics of type Image
+      This is the default pass-through subscriber for topics of type PointCloud
     </description>
   </class>
+
+
+  <class name="imagem_transport/udpmulti_pub_img" 
+		type="udpmulti_transport::UDPMultiPublisher<sensor_msgs::Image>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
+    <description>
+        This publisher published this point cloud as UDP multicast telegram. 
+        Size is limited to 8092 bytes
+    </description>
+  </class>
+
+  <class name="imagem_transport/udpmulti_sub_img" 
+		type="udpmulti_transport::UDPMultiSubscriber<sensor_msgs::Image>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
+    <description>
+        This subscriber subscribes to point cloud UDP multicast telegrams. 
+    </description>
+  </class>
+
+  <class name="imagem_transport/bz2_pub_img" 
+		type="bz2_transport::BZ2Publisher<sensor_msgs::Image>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
+    <description>
+        This publisher published this point cloud as BZ2 compressed binary
+        blobs
+    </description>
+  </class>
+
+  <class name="imagem_transport/bz2_sub_img" 
+		type="bz2_transport::BZ2Subscriber<sensor_msgs::Image>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
+    <description>
+        This subscriber subscribes to point cloud BZ2 binary blobs
+    </description>
+  </class>
+
 </library>

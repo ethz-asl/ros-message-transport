@@ -10,6 +10,7 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 #set(ROS_BUILD_TYPE RelWithDebInfo)
 
 rosbuild_init()
+rosbuild_include(templated_transports templated_transports)
 
 #set the default path for built executables to the "bin" directory
 set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
@@ -17,6 +18,9 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
 find_library(LOG4CXX_LIBRARY log4cxx)
+
+generate_plugin_description(SRC default_plugins_template.m4 OUTPUT default_plugins.xml)
+
 
 rosbuild_add_boost_directories()
 rosbuild_add_library(${PROJECT_NAME} src/manifest.cpp)

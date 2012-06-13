@@ -1,14 +1,7 @@
 #include <pluginlib/class_list_macros.h>
-#include <message_transport/raw_publisher.h>
-#include <message_transport/raw_subscriber.h>
-#include <sharedmem_transport/sharedmem_publisher.h>
-#include <sharedmem_transport/sharedmem_subscriber.h>
+#include <templated_transports/declare_all_templates.h>
 #include <sensor_msgs/Image.h>
 
-// Raw class
-PLUGINLIB_DECLARE_CLASS(imagem_transport,raw_pub, message_transport::RawPublisher<sensor_msgs::Image>, message_transport::PublisherPlugin<sensor_msgs::Image>)
-PLUGINLIB_DECLARE_CLASS(imagem_transport,raw_sub, message_transport::RawSubscriber<sensor_msgs::Image>, message_transport::SubscriberPlugin<sensor_msgs::Image>)
+// Brings in all templated transports (sharedmem, raw, udpmulti, bz2)
+DECLARE_ALL_TEMPLATES(imagem_transport,img,sensor_msgs::Image)
 
-// Sharedmem class
-PLUGINLIB_DECLARE_CLASS(imagem_transport,sharedmem_pub, sharedmem_transport::SharedmemPublisher<sensor_msgs::Image>, message_transport::PublisherPlugin<sensor_msgs::Image>)
-PLUGINLIB_DECLARE_CLASS(imagem_transport,sharedmem_sub, sharedmem_transport::SharedmemSubscriber<sensor_msgs::Image>, message_transport::SubscriberPlugin<sensor_msgs::Image>)
