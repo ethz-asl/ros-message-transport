@@ -10,9 +10,7 @@
   <url>http://ros.org/wiki/pointcloud_transport_base</url>
   <depend package="pluginlib"/>
   <depend package="message_transport_common"/>
-  <depend package="sharedmem_transport"/>
-  <depend package="udpmulti_transport"/>
-  <depend package="bz2_transport"/>
+  <depend package="templated_transports"/>
   <depend package="sensor_msgs"/>
 
   <export>

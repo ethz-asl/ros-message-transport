@@ -1,0 +1,26 @@
+<package>
+  <description brief="templated_transports">
+
+     templated_transports
+
+  </description>
+  <author>Cedric Pradalier</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/templated_transports</url>
+  <depend package="rosbuild"/>
+  <depend package="roscpp"/>
+  <depend package="pluginlib"/>
+  <depend package="message_transport_common"/>
+  <depend package="sharedmem_transport"/>
+  <depend package="udpmulti_transport"/>
+  <depend package="bz2_transport"/>
+
+  <export>
+    <cpp cflags="-I${prefix}/include"/>
+    <!-- This causes this cmake directory to be available to depending packages -->
+    <rosbuild cmake_directory="${prefix}/cmake"/>
+  </export>
+</package>
+
+

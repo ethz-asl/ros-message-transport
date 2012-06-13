@@ -1,5 +1,29 @@
+
+
+
+
+
 <library path="lib/libpointcloud_transport">
-    <class name="pointcloud_transport/raw_pub" 
+    
+
+  <class name="pointcloud_transport/decimated_pub_pc" 
+		type="decimated_transport::DecimatedPublisher" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
+    <description>
+		This publisher only publishes 1/10th of the point cloud data
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/decimated_sub_pc" 
+		type="decimated_transport::DecimatedSubscriber" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
+    <description>
+      This is the default pass-through subscriber for topics of type PointCloud
+    </description>
+  </class>
+
+    
+    <class name="pointcloud_transport/raw_pub_pc" 
 		type="message_transport::RawPublisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -7,7 +31,7 @@
     </description>
   </class>
 
-  <class name="pointcloud_transport/raw_sub" 
+  <class name="pointcloud_transport/raw_sub_pc" 
 		type="message_transport::RawSubscriber<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -15,7 +39,7 @@
     </description>
   </class>
 
-  <class name="pointcloud_transport/sharedmem_pub" 
+  <class name="pointcloud_transport/sharedmem_pub_pc" 
 		type="sharedmem_transport::SharedmemPublisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -23,7 +47,7 @@
     </description>
   </class>
 
-  <class name="pointcloud_transport/sharedmem_sub" 
+  <class name="pointcloud_transport/sharedmem_sub_pc" 
 		type="sharedmem_transport::SharedmemSubscriber<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -32,23 +56,7 @@
   </class>
 
 
-  <class name="pointcloud_transport/decimated_pub" 
-		type="decimated_transport::DecimatedPublisher" 
-		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
-    <description>
-		This publisher only publishes 1/10th of the point cloud data
-    </description>
-  </class>
-
-  <class name="pointcloud_transport/decimated_sub" 
-		type="decimated_transport::DecimatedSubscriber" 
-		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
-    <description>
-      This is the default pass-through subscriber for topics of type PointCloud
-    </description>
-  </class>
-
-  <class name="pointcloud_transport/udpmulti_pub" 
+  <class name="pointcloud_transport/udpmulti_pub_pc" 
 		type="udpmulti_transport::UDPMultiPublisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -57,7 +65,7 @@
     </description>
   </class>
 
-  <class name="pointcloud_transport/udpmulti_sub" 
+  <class name="pointcloud_transport/udpmulti_sub_pc" 
 		type="udpmulti_transport::UDPMultiSubscriber<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -65,7 +73,7 @@
     </description>
   </class>
 
-  <class name="pointcloud_transport/bz2_pub" 
+  <class name="pointcloud_transport/bz2_pub_pc" 
 		type="bz2_transport::BZ2Publisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -74,11 +82,148 @@
     </description>
   </class>
 
-  <class name="pointcloud_transport/bz2_sub" 
+  <class name="pointcloud_transport/bz2_sub_pc" 
 		type="bz2_transport::BZ2Subscriber<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
         This subscriber subscribes to point cloud BZ2 binary blobs
     </description>
   </class>
+
+    
+    <class name="pointcloud_transport/raw_pub_pc2" 
+		type="message_transport::RawPublisher<sensor_msgs::PointCloud2>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud2>">
+    <description>
+      This is the default publisher. It publishes the objects as-is on the base topic.
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/raw_sub_pc2" 
+		type="message_transport::RawSubscriber<sensor_msgs::PointCloud2>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud2>">
+    <description>
+      This is the default pass-through subscriber for topics of type PointCloud
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/sharedmem_pub_pc2" 
+		type="sharedmem_transport::SharedmemPublisher<sensor_msgs::PointCloud2>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud2>">
+    <description>
+      This is the default publisher. It publishes the objects as-is on the base topic.
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/sharedmem_sub_pc2" 
+		type="sharedmem_transport::SharedmemSubscriber<sensor_msgs::PointCloud2>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud2>">
+    <description>
+      This is the default pass-through subscriber for topics of type PointCloud
+    </description>
+  </class>
+
+
+  <class name="pointcloud_transport/udpmulti_pub_pc2" 
+		type="udpmulti_transport::UDPMultiPublisher<sensor_msgs::PointCloud2>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud2>">
+    <description>
+        This publisher published this point cloud as UDP multicast telegram. 
+        Size is limited to 8092 bytes
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/udpmulti_sub_pc2" 
+		type="udpmulti_transport::UDPMultiSubscriber<sensor_msgs::PointCloud2>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud2>">
+    <description>
+        This subscriber subscribes to point cloud UDP multicast telegrams. 
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/bz2_pub_pc2" 
+		type="bz2_transport::BZ2Publisher<sensor_msgs::PointCloud2>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud2>">
+    <description>
+        This publisher published this point cloud as BZ2 compressed binary
+        blobs
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/bz2_sub_pc2" 
+		type="bz2_transport::BZ2Subscriber<sensor_msgs::PointCloud2>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud2>">
+    <description>
+        This subscriber subscribes to point cloud BZ2 binary blobs
+    </description>
+  </class>
+
+    
+    <class name="pointcloud_transport/raw_pub_ls" 
+		type="message_transport::RawPublisher<sensor_msgs::LaserScan>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::LaserScan>">
+    <description>
+      This is the default publisher. It publishes the objects as-is on the base topic.
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/raw_sub_ls" 
+		type="message_transport::RawSubscriber<sensor_msgs::LaserScan>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::LaserScan>">
+    <description>
+      This is the default pass-through subscriber for topics of type PointCloud
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/sharedmem_pub_ls" 
+		type="sharedmem_transport::SharedmemPublisher<sensor_msgs::LaserScan>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::LaserScan>">
+    <description>
+      This is the default publisher. It publishes the objects as-is on the base topic.
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/sharedmem_sub_ls" 
+		type="sharedmem_transport::SharedmemSubscriber<sensor_msgs::LaserScan>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::LaserScan>">
+    <description>
+      This is the default pass-through subscriber for topics of type PointCloud
+    </description>
+  </class>
+
+
+  <class name="pointcloud_transport/udpmulti_pub_ls" 
+		type="udpmulti_transport::UDPMultiPublisher<sensor_msgs::LaserScan>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::LaserScan>">
+    <description>
+        This publisher published this point cloud as UDP multicast telegram. 
+        Size is limited to 8092 bytes
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/udpmulti_sub_ls" 
+		type="udpmulti_transport::UDPMultiSubscriber<sensor_msgs::LaserScan>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::LaserScan>">
+    <description>
+        This subscriber subscribes to point cloud UDP multicast telegrams. 
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/bz2_pub_ls" 
+		type="bz2_transport::BZ2Publisher<sensor_msgs::LaserScan>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::LaserScan>">
+    <description>
+        This publisher published this point cloud as BZ2 compressed binary
+        blobs
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/bz2_sub_ls" 
+		type="bz2_transport::BZ2Subscriber<sensor_msgs::LaserScan>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::LaserScan>">
+    <description>
+        This subscriber subscribes to point cloud BZ2 binary blobs
+    </description>
+  </class>
+
 </library>
