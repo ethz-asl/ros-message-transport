@@ -23,7 +23,7 @@
   </class>
 
     
-    <class name="pointcloud_transport/raw_pub_pc" 
+    <class name="pointcloud_transport/raw_pc_pub" 
 		type="message_transport::RawPublisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
@@ -31,67 +31,86 @@
     </description>
   </class>
 
-  <class name="pointcloud_transport/raw_sub_pc" 
+  <class name="pointcloud_transport/raw_pc_sub" 
 		type="message_transport::RawSubscriber<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
-      This is the default pass-through subscriber for topics of type PointCloud
+      This is the default pass-through subscriber for topics of type sensor_msgs::PointCloud
     </description>
   </class>
 
-  <class name="pointcloud_transport/sharedmem_pub_pc" 
+  <class name="pointcloud_transport/sharedmem_pc_pub" 
 		type="sharedmem_transport::SharedmemPublisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
-      This is the default publisher. It publishes the objects as-is on the base topic.
+      This publisher publish its data through a shared memory segment and
+      shared memory condition.
     </description>
   </class>
 
-  <class name="pointcloud_transport/sharedmem_sub_pc" 
+  <class name="pointcloud_transport/sharedmem_pc_sub" 
 		type="sharedmem_transport::SharedmemSubscriber<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
-      This is the default pass-through subscriber for topics of type PointCloud
+      This is the shared memory subscriber.
     </description>
   </class>
 
 
-  <class name="pointcloud_transport/udpmulti_pub_pc" 
+  <class name="pointcloud_transport/udpmulti_pc_pub" 
 		type="udpmulti_transport::UDPMultiPublisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
-        This publisher published this point cloud as UDP multicast telegram. 
+        This publisher published its data as UDP multicast telegram. 
         Size is limited to 8092 bytes
     </description>
   </class>
 
-  <class name="pointcloud_transport/udpmulti_sub_pc" 
+  <class name="pointcloud_transport/udpmulti_pc_sub" 
 		type="udpmulti_transport::UDPMultiSubscriber<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
-        This subscriber subscribes to point cloud UDP multicast telegrams. 
+        This subscriber subscribes to UDP multicast telegrams. 
     </description>
   </class>
 
-  <class name="pointcloud_transport/bz2_pub_pc" 
+  <class name="pointcloud_transport/bz2_pc_pub" 
 		type="bz2_transport::BZ2Publisher<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
     <description>
-        This publisher published this point cloud as BZ2 compressed binary
+        This publisher publishes its type as BZ2 compressed binary
         blobs
     </description>
   </class>
 
-  <class name="pointcloud_transport/bz2_sub_pc" 
+  <class name="pointcloud_transport/bz2_pc_sub" 
 		type="bz2_transport::BZ2Subscriber<sensor_msgs::PointCloud>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
     <description>
-        This subscriber subscribes to point cloud BZ2 binary blobs
+        This subscriber subscribes to BZ2 binary blobs
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/throttled_pc_pub" 
+		type="throttled_transport::ThrottledPublisher<sensor_msgs::PointCloud>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud>">
+    <description>
+        This publisher publishes its message but provide a way to limit the
+        number of message per second or the bandwidth used by the topic.
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/throttled_pc_sub" 
+		type="throttled_transport::ThrottledSubscriber<sensor_msgs::PointCloud>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud>">
+    <description>
+        This subscriber subscribes to throttled topic. This is basically the
+        same as the raw subscriber.
     </description>
   </class>
 
     
-    <class name="pointcloud_transport/raw_pub_pc2" 
+    <class name="pointcloud_transport/raw_pc2_pub" 
 		type="message_transport::RawPublisher<sensor_msgs::PointCloud2>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud2>">
     <description>
@@ -99,67 +118,86 @@
     </description>
   </class>
 
-  <class name="pointcloud_transport/raw_sub_pc2" 
+  <class name="pointcloud_transport/raw_pc2_sub" 
 		type="message_transport::RawSubscriber<sensor_msgs::PointCloud2>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud2>">
     <description>
-      This is the default pass-through subscriber for topics of type PointCloud
+      This is the default pass-through subscriber for topics of type sensor_msgs::PointCloud2
     </description>
   </class>
 
-  <class name="pointcloud_transport/sharedmem_pub_pc2" 
+  <class name="pointcloud_transport/sharedmem_pc2_pub" 
 		type="sharedmem_transport::SharedmemPublisher<sensor_msgs::PointCloud2>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud2>">
     <description>
-      This is the default publisher. It publishes the objects as-is on the base topic.
+      This publisher publish its data through a shared memory segment and
+      shared memory condition.
     </description>
   </class>
 
-  <class name="pointcloud_transport/sharedmem_sub_pc2" 
+  <class name="pointcloud_transport/sharedmem_pc2_sub" 
 		type="sharedmem_transport::SharedmemSubscriber<sensor_msgs::PointCloud2>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud2>">
     <description>
-      This is the default pass-through subscriber for topics of type PointCloud
+      This is the shared memory subscriber.
     </description>
   </class>
 
 
-  <class name="pointcloud_transport/udpmulti_pub_pc2" 
+  <class name="pointcloud_transport/udpmulti_pc2_pub" 
 		type="udpmulti_transport::UDPMultiPublisher<sensor_msgs::PointCloud2>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud2>">
     <description>
-        This publisher published this point cloud as UDP multicast telegram. 
+        This publisher published its data as UDP multicast telegram. 
         Size is limited to 8092 bytes
     </description>
   </class>
 
-  <class name="pointcloud_transport/udpmulti_sub_pc2" 
+  <class name="pointcloud_transport/udpmulti_pc2_sub" 
 		type="udpmulti_transport::UDPMultiSubscriber<sensor_msgs::PointCloud2>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud2>">
     <description>
-        This subscriber subscribes to point cloud UDP multicast telegrams. 
+        This subscriber subscribes to UDP multicast telegrams. 
     </description>
   </class>
 
-  <class name="pointcloud_transport/bz2_pub_pc2" 
+  <class name="pointcloud_transport/bz2_pc2_pub" 
 		type="bz2_transport::BZ2Publisher<sensor_msgs::PointCloud2>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud2>">
     <description>
-        This publisher published this point cloud as BZ2 compressed binary
+        This publisher publishes its type as BZ2 compressed binary
         blobs
     </description>
   </class>
 
-  <class name="pointcloud_transport/bz2_sub_pc2" 
+  <class name="pointcloud_transport/bz2_pc2_sub" 
 		type="bz2_transport::BZ2Subscriber<sensor_msgs::PointCloud2>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud2>">
     <description>
-        This subscriber subscribes to point cloud BZ2 binary blobs
+        This subscriber subscribes to BZ2 binary blobs
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/throttled_pc2_pub" 
+		type="throttled_transport::ThrottledPublisher<sensor_msgs::PointCloud2>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::PointCloud2>">
+    <description>
+        This publisher publishes its message but provide a way to limit the
+        number of message per second or the bandwidth used by the topic.
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/throttled_pc2_sub" 
+		type="throttled_transport::ThrottledSubscriber<sensor_msgs::PointCloud2>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::PointCloud2>">
+    <description>
+        This subscriber subscribes to throttled topic. This is basically the
+        same as the raw subscriber.
     </description>
   </class>
 
     
-    <class name="pointcloud_transport/raw_pub_ls" 
+    <class name="pointcloud_transport/raw_ls_pub" 
 		type="message_transport::RawPublisher<sensor_msgs::LaserScan>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::LaserScan>">
     <description>
@@ -167,62 +205,81 @@
     </description>
   </class>
 
-  <class name="pointcloud_transport/raw_sub_ls" 
+  <class name="pointcloud_transport/raw_ls_sub" 
 		type="message_transport::RawSubscriber<sensor_msgs::LaserScan>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::LaserScan>">
     <description>
-      This is the default pass-through subscriber for topics of type PointCloud
+      This is the default pass-through subscriber for topics of type sensor_msgs::LaserScan
     </description>
   </class>
 
-  <class name="pointcloud_transport/sharedmem_pub_ls" 
+  <class name="pointcloud_transport/sharedmem_ls_pub" 
 		type="sharedmem_transport::SharedmemPublisher<sensor_msgs::LaserScan>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::LaserScan>">
     <description>
-      This is the default publisher. It publishes the objects as-is on the base topic.
+      This publisher publish its data through a shared memory segment and
+      shared memory condition.
     </description>
   </class>
 
-  <class name="pointcloud_transport/sharedmem_sub_ls" 
+  <class name="pointcloud_transport/sharedmem_ls_sub" 
 		type="sharedmem_transport::SharedmemSubscriber<sensor_msgs::LaserScan>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::LaserScan>">
     <description>
-      This is the default pass-through subscriber for topics of type PointCloud
+      This is the shared memory subscriber.
     </description>
   </class>
 
 
-  <class name="pointcloud_transport/udpmulti_pub_ls" 
+  <class name="pointcloud_transport/udpmulti_ls_pub" 
 		type="udpmulti_transport::UDPMultiPublisher<sensor_msgs::LaserScan>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::LaserScan>">
     <description>
-        This publisher published this point cloud as UDP multicast telegram. 
+        This publisher published its data as UDP multicast telegram. 
         Size is limited to 8092 bytes
     </description>
   </class>
 
-  <class name="pointcloud_transport/udpmulti_sub_ls" 
+  <class name="pointcloud_transport/udpmulti_ls_sub" 
 		type="udpmulti_transport::UDPMultiSubscriber<sensor_msgs::LaserScan>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::LaserScan>">
     <description>
-        This subscriber subscribes to point cloud UDP multicast telegrams. 
+        This subscriber subscribes to UDP multicast telegrams. 
     </description>
   </class>
 
-  <class name="pointcloud_transport/bz2_pub_ls" 
+  <class name="pointcloud_transport/bz2_ls_pub" 
 		type="bz2_transport::BZ2Publisher<sensor_msgs::LaserScan>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::LaserScan>">
     <description>
-        This publisher published this point cloud as BZ2 compressed binary
+        This publisher publishes its type as BZ2 compressed binary
         blobs
     </description>
   </class>
 
-  <class name="pointcloud_transport/bz2_sub_ls" 
+  <class name="pointcloud_transport/bz2_ls_sub" 
 		type="bz2_transport::BZ2Subscriber<sensor_msgs::LaserScan>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::LaserScan>">
     <description>
-        This subscriber subscribes to point cloud BZ2 binary blobs
+        This subscriber subscribes to BZ2 binary blobs
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/throttled_ls_pub" 
+		type="throttled_transport::ThrottledPublisher<sensor_msgs::LaserScan>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::LaserScan>">
+    <description>
+        This publisher publishes its message but provide a way to limit the
+        number of message per second or the bandwidth used by the topic.
+    </description>
+  </class>
+
+  <class name="pointcloud_transport/throttled_ls_sub" 
+		type="throttled_transport::ThrottledSubscriber<sensor_msgs::LaserScan>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::LaserScan>">
+    <description>
+        This subscriber subscribes to throttled topic. This is basically the
+        same as the raw subscriber.
     </description>
   </class>
 

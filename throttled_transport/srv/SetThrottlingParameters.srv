@@ -1,0 +1,7 @@
+# mode can be "frequency" or "bandwidth"
+string throttling_mode
+# Only one is needed
+float32 max_frequency
+float32 max_bandwidth
+---
+int32 result
