@@ -11,7 +11,7 @@
   <depend package="sensor_msgs"/>
   <depend package="message_transport_common"/>
   <depend package="imagem_transport"/>
-  <depend package="opencv2"/>
+  <rosdep name="opencv2"/>
   <depend package="cv_bridge"/>
 
   <export>

@@ -16,7 +16,7 @@
   </export>
 
 
-  <rosdep name="libbz2-dev"/>
+  <rosdep name="bzip2"/>
 
 </package>
 
