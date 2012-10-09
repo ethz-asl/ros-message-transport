@@ -13,7 +13,7 @@
   <depend package="message_transport_common"/>
   <depend package="templated_transports"/>
   <depend package="sensor_msgs"/>
-  <rosdep nam="opencv2"/>
+  <rosdep name="opencv2"/>
   <depend package="cv_bridge"/>
   <depend package="message_filters"/>
 
