@@ -3,7 +3,7 @@
 
 <library path="lib/libimagem_transport">
     
-    <class name="imagem_transport/raw_pub_img" 
+    <class name="imagem_transport/raw_img_pub" 
 		type="message_transport::RawPublisher<sensor_msgs::Image>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
     <description>
@@ -11,62 +11,81 @@
     </description>
   </class>
 
-  <class name="imagem_transport/raw_sub_img" 
+  <class name="imagem_transport/raw_img_sub" 
 		type="message_transport::RawSubscriber<sensor_msgs::Image>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
     <description>
-      This is the default pass-through subscriber for topics of type PointCloud
+      This is the default pass-through subscriber for topics of type sensor_msgs::Image
     </description>
   </class>
 
-  <class name="imagem_transport/sharedmem_pub_img" 
+  <class name="imagem_transport/sharedmem_img_pub" 
 		type="sharedmem_transport::SharedmemPublisher<sensor_msgs::Image>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
     <description>
-      This is the default publisher. It publishes the objects as-is on the base topic.
+      This publisher publish its data through a shared memory segment and
+      shared memory condition.
     </description>
   </class>
 
-  <class name="imagem_transport/sharedmem_sub_img" 
+  <class name="imagem_transport/sharedmem_img_sub" 
 		type="sharedmem_transport::SharedmemSubscriber<sensor_msgs::Image>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
     <description>
-      This is the default pass-through subscriber for topics of type PointCloud
+      This is the shared memory subscriber.
     </description>
   </class>
 
 
-  <class name="imagem_transport/udpmulti_pub_img" 
+  <class name="imagem_transport/udpmulti_img_pub" 
 		type="udpmulti_transport::UDPMultiPublisher<sensor_msgs::Image>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
     <description>
-        This publisher published this point cloud as UDP multicast telegram. 
+        This publisher published its data as UDP multicast telegram. 
         Size is limited to 8092 bytes
     </description>
   </class>
 
-  <class name="imagem_transport/udpmulti_sub_img" 
+  <class name="imagem_transport/udpmulti_img_sub" 
 		type="udpmulti_transport::UDPMultiSubscriber<sensor_msgs::Image>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
     <description>
-        This subscriber subscribes to point cloud UDP multicast telegrams. 
+        This subscriber subscribes to UDP multicast telegrams. 
     </description>
   </class>
 
-  <class name="imagem_transport/bz2_pub_img" 
+  <class name="imagem_transport/bz2_img_pub" 
 		type="bz2_transport::BZ2Publisher<sensor_msgs::Image>" 
 		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
     <description>
-        This publisher published this point cloud as BZ2 compressed binary
+        This publisher publishes its type as BZ2 compressed binary
         blobs
     </description>
   </class>
 
-  <class name="imagem_transport/bz2_sub_img" 
+  <class name="imagem_transport/bz2_img_sub" 
 		type="bz2_transport::BZ2Subscriber<sensor_msgs::Image>" 
 		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
     <description>
-        This subscriber subscribes to point cloud BZ2 binary blobs
+        This subscriber subscribes to BZ2 binary blobs
+    </description>
+  </class>
+
+  <class name="imagem_transport/throttled_img_pub" 
+		type="throttled_transport::ThrottledPublisher<sensor_msgs::Image>" 
+		base_class_type="message_transport::PublisherPlugin<sensor_msgs::Image>">
+    <description>
+        This publisher publishes its message but provide a way to limit the
+        number of message per second or the bandwidth used by the topic.
+    </description>
+  </class>
+
+  <class name="imagem_transport/throttled_img_sub" 
+		type="throttled_transport::ThrottledSubscriber<sensor_msgs::Image>" 
+		base_class_type="message_transport::SubscriberPlugin<sensor_msgs::Image>">
+    <description>
+        This subscriber subscribes to throttled topic. This is basically the
+        same as the raw subscriber.
     </description>
   </class>
 
