@@ -3,7 +3,7 @@
 
 <library path="lib/libstring_transport">
     
-    <class name="string_transport/raw_pub_str" 
+    <class name="string_transport/raw_str_pub" 
 		type="message_transport::RawPublisher<std_msgs::String>" 
 		base_class_type="message_transport::PublisherPlugin<std_msgs::String>">
     <description>
@@ -11,62 +11,81 @@
     </description>
   </class>
 
-  <class name="string_transport/raw_sub_str" 
+  <class name="string_transport/raw_str_sub" 
 		type="message_transport::RawSubscriber<std_msgs::String>" 
 		base_class_type="message_transport::SubscriberPlugin<std_msgs::String>">
     <description>
-      This is the default pass-through subscriber for topics of type PointCloud
+      This is the default pass-through subscriber for topics of type std_msgs::String
     </description>
   </class>
 
-  <class name="string_transport/sharedmem_pub_str" 
+  <class name="string_transport/sharedmem_str_pub" 
 		type="sharedmem_transport::SharedmemPublisher<std_msgs::String>" 
 		base_class_type="message_transport::PublisherPlugin<std_msgs::String>">
     <description>
-      This is the default publisher. It publishes the objects as-is on the base topic.
+      This publisher publish its data through a shared memory segment and
+      shared memory condition.
     </description>
   </class>
 
-  <class name="string_transport/sharedmem_sub_str" 
+  <class name="string_transport/sharedmem_str_sub" 
 		type="sharedmem_transport::SharedmemSubscriber<std_msgs::String>" 
 		base_class_type="message_transport::SubscriberPlugin<std_msgs::String>">
     <description>
-      This is the default pass-through subscriber for topics of type PointCloud
+      This is the shared memory subscriber.
     </description>
   </class>
 
 
-  <class name="string_transport/udpmulti_pub_str" 
+  <class name="string_transport/udpmulti_str_pub" 
 		type="udpmulti_transport::UDPMultiPublisher<std_msgs::String>" 
 		base_class_type="message_transport::PublisherPlugin<std_msgs::String>">
     <description>
-        This publisher published this point cloud as UDP multicast telegram. 
+        This publisher published its data as UDP multicast telegram. 
         Size is limited to 8092 bytes
     </description>
   </class>
 
-  <class name="string_transport/udpmulti_sub_str" 
+  <class name="string_transport/udpmulti_str_sub" 
 		type="udpmulti_transport::UDPMultiSubscriber<std_msgs::String>" 
 		base_class_type="message_transport::SubscriberPlugin<std_msgs::String>">
     <description>
-        This subscriber subscribes to point cloud UDP multicast telegrams. 
+        This subscriber subscribes to UDP multicast telegrams. 
     </description>
   </class>
 
-  <class name="string_transport/bz2_pub_str" 
+  <class name="string_transport/bz2_str_pub" 
 		type="bz2_transport::BZ2Publisher<std_msgs::String>" 
 		base_class_type="message_transport::PublisherPlugin<std_msgs::String>">
     <description>
-        This publisher published this point cloud as BZ2 compressed binary
+        This publisher publishes its type as BZ2 compressed binary
         blobs
     </description>
   </class>
 
-  <class name="string_transport/bz2_sub_str" 
+  <class name="string_transport/bz2_str_sub" 
 		type="bz2_transport::BZ2Subscriber<std_msgs::String>" 
 		base_class_type="message_transport::SubscriberPlugin<std_msgs::String>">
     <description>
-        This subscriber subscribes to point cloud BZ2 binary blobs
+        This subscriber subscribes to BZ2 binary blobs
+    </description>
+  </class>
+
+  <class name="string_transport/throttled_str_pub" 
+		type="throttled_transport::ThrottledPublisher<std_msgs::String>" 
+		base_class_type="message_transport::PublisherPlugin<std_msgs::String>">
+    <description>
+        This publisher publishes its message but provide a way to limit the
+        number of message per second or the bandwidth used by the topic.
+    </description>
+  </class>
+
+  <class name="string_transport/throttled_str_sub" 
+		type="throttled_transport::ThrottledSubscriber<std_msgs::String>" 
+		base_class_type="message_transport::SubscriberPlugin<std_msgs::String>">
+    <description>
+        This subscriber subscribes to throttled topic. This is basically the
+        same as the raw subscriber.
     </description>
   </class>
 
