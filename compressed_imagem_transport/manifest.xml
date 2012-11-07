@@ -13,6 +13,8 @@
   <depend package="imagem_transport"/>
   <rosdep name="opencv2"/>
   <depend package="cv_bridge"/>
+  <depend package="compressed_image_transport"/>
+  <depend package="dynamic_reconfigure"/>
 
   <export>
     <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -lcompressed_imagem_transport" cflags="-I${prefix}/include"/>
