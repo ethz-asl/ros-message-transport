@@ -9,6 +9,7 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 #  MinSizeRel     : w/o debug symbols, w/ optimization, stripped binaries
 #set(ROS_BUILD_TYPE RelWithDebInfo)
 
+find_package(OpenCV REQUIRED)
 rosbuild_init()
 
 rosbuild_genmsg()
@@ -18,12 +19,19 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 #set the default path for built libraries to the "lib" directory
 set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 
+# Dynamic reconfigure
+rosbuild_find_ros_package(dynamic_reconfigure)
+include(${dynamic_reconfigure_PACKAGE_PATH}/cmake/cfgbuild.cmake)
+gencfg()
+
+
 rosbuild_add_library(${PROJECT_NAME} src/theora_publisher.cpp src/theora_subscriber.cpp src/manifest.cpp)
 #TODO (added by ethand 8/27/09): the below line should replaced by fixing the manifest for the libtheora package
-target_link_libraries(${PROJECT_NAME} theoraenc theoradec)
+target_link_libraries(${PROJECT_NAME} ogg theora theoraenc theoradec ${OpenCV_LIBS})
 
-rosbuild_add_executable(ogg_saver src/ogg_saver.cpp)
-target_link_libraries(ogg_saver libogg.so)
+# Keeping the original one
+# rosbuild_add_executable(ogg_saver src/ogg_saver.cpp)
+# target_link_libraries(ogg_saver libogg.so)
 
 #common commands for building c++ executables and libraries
 #rosbuild_add_library(${PROJECT_NAME} src/example.cpp)

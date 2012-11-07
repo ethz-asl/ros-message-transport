@@ -12,11 +12,14 @@
   <depend package="message_transport_common"/>
   <depend package="sharedmem_transport"/>
   <depend package="imagem_transport"/>
-  <rosdep name="opencv2"/>
   <depend package="cv_bridge"/>
   <depend package="pluginlib"/>
-  <rosdep name="libtheora"/>
+  <depend package="dynamic_reconfigure"/>
+  <depend package="theora_image_transport"/>
+ 
   <rosdep name="libogg"/>
+  <rosdep name="libtheora"/>
+
 
   <export>
     <cpp lflags="-Wl,-rpath,${prefix}/lib -L${prefix}/lib -ltheora_image_transport" cflags="-I${prefix}/include"/>

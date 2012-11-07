@@ -2,11 +2,13 @@
 #define IMAGEM_TRANSPORT_THEORA_PUBLISHER_H
 
 #include <message_transport/simple_publisher_plugin.h>
-#include <sensor_msgs/Image.h>
 #include <opencv/cv.h>
 #include <opencv/cxcore.h>
-#include <cv_bridge/CvBridge.h>
-#include <theora_imagem_transport/packet.h>
+#include <cv_bridge/cv_bridge.h>
+#include <std_msgs/Header.h>
+#include <dynamic_reconfigure/server.h>
+#include <theora_imagem_transport/TheoraPublisherConfig.h>
+#include <theora_image_transport/Packet.h>
 
 #include <theora/codec.h>
 #include <theora/theoraenc.h>
@@ -14,47 +16,54 @@
 
 namespace theora_imagem_transport {
 
-class TheoraPublisher : public message_transport::SimplePublisherPlugin<sensor_msgs::Image,theora_imagem_transport::packet>
-{
-public:
-  TheoraPublisher();
-  virtual ~TheoraPublisher();
+    class TheoraPublisher : public message_transport::SimplePublisherPlugin<sensor_msgs::Image,theora_image_transport::Packet>
+    {
+        public:
+            TheoraPublisher();
+            virtual ~TheoraPublisher();
 
-  //Return the system unique string representing the theora transport type
-  virtual std::string getTransportName() const
-  {
-    return "theora";
-  }
+            //Return the system unique string representing the theora transport type
+            virtual std::string getTransportName() const
+            {
+                return "theora";
+            }
 
-protected:
-  //Callback to send header packets to new clients
-  virtual void connectCallback(const ros::SingleSubscriberPublisher& pub);
+        protected:
+            //Callback to send header packets to new clients
+            virtual void connectCallback(const ros::SingleSubscriberPublisher& pub);
 
-  //Main publish function
-  virtual void publish(const sensor_msgs::Image& message,
-		  const message_transport::SimplePublisherPlugin<sensor_msgs::Image,theora_imagem_transport::packet>::PublishFn& publish_fn) const ;
+            //Main publish function
+            virtual void publish(const sensor_msgs::Image& message,
+                    const message_transport::SimplePublisherPlugin<sensor_msgs::Image,theora_image_transport::Packet>::PublishFn& publish_fn) const ;
 
-private:
-  //Utility functions
-  void sendHeader(const ros::SingleSubscriberPublisher& pub) const;
-  void ensure_encoding_context(const CvSize &size, const PublishFn& publish_fn) const;
-  void oggPacketToMsg(const ogg_packet &oggpacket, theora_imagem_transport::packet &msgOutput) const;
+        private:
+            // Overridden to tweak arguments and set up reconfigure server
+            virtual void advertiseImpl(ros::NodeHandle & nh, const std::string& base_topic, uint32_t queue_size,
+					const message_transport::SingleSubscriberPublisher<sensor_msgs::Image>::StatusCB& user_connect_cb,
+					const message_transport::SingleSubscriberPublisher<sensor_msgs::Image>::StatusCB& user_disconnect_cb,
+                    const ros::VoidPtr& tracked_object, bool latch);
 
-  //I have some reservations about making everything mutable like this but
-  //from the users perspective the publisher is essentially stateless except for differences in
-  //bitrate of the resulting stream and required image format.  Thus in order to match the
-  //ros API in image_publisher the publish method is still const
+            // Dynamic reconfigure support
+            typedef theora_imagem_transport::TheoraPublisherConfig Config;
+            typedef dynamic_reconfigure::Server<Config> ReconfigureServer;
+            boost::shared_ptr<ReconfigureServer> reconfigure_server_;
 
-  mutable sensor_msgs::CvBridge img_bridge_;
-  mutable th_enc_ctx* encoding_context_;
-  mutable std::vector<ogg_packet> stream_header_;
+            void configCb(Config& config, uint32_t level);
 
-  //Offsets to make image size into multiple of 16 (with alignment of image data to even pixels I believe)
-  mutable int nearestWidth;
-  mutable int nearestHeight;
-  mutable int nearestXoff;
-  mutable int nearestYoff;
-};
+            // Utility functions
+            bool ensureEncodingContext(const sensor_msgs::Image& image, const PublishFn& publish_fn) const;
+            void oggPacketToMsg(const std_msgs::Header& header, const ogg_packet &oggpacket,
+                    theora_image_transport::Packet &msg) const;
+            void updateKeyframeFrequency() const;
+
+            // Some data is preserved across calls to publish(), but from the user's perspective publish() is
+            // "logically const"
+            mutable cv_bridge::CvImage img_image_;
+            mutable th_info encoder_setup_;
+            mutable ogg_uint32_t keyframe_frequency_;
+            mutable boost::shared_ptr<th_enc_ctx> encoding_context_;
+            mutable std::vector<theora_image_transport::Packet> stream_header_;
+    };
 
 } //namespace compressed_image_transport
 
