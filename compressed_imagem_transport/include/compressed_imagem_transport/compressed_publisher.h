@@ -26,7 +26,7 @@ namespace compressed_imagem_transport {
 
             virtual void postAdvertiseInit() {
                 // Set up reconfigure server for this topic
-                reconfigure_server_ = boost::make_shared<ReconfigureServer>(this->getNodeHandle());
+                reconfigure_server_ = boost::make_shared<ReconfigureServer>(this->getParamNode());
                 ReconfigureServer::CallbackType f = boost::bind(&CompressedPublisher::configCb, this, _1, _2);
                 reconfigure_server_->setCallback(f);
             }

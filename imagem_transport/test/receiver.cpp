@@ -42,16 +42,16 @@ void callback(const sensor_msgs::ImageConstPtr& image)
 int main(int argc, char** argv)
 {
   ros::init(argc, argv, "test_receiver", ros::init_options::AnonymousName);
-  ros::NodeHandle nh;
+  ros::NodeHandle nh("~");
   message_transport::MessageTransport<sensor_msgs::Image> 
 	  it(nh,"imagem_transport","sensor_msgs::Image");
 
   std::string pkgname("imagem_transport");
-  transport = std::string((argc > 1) ? argv[1] : "imagem_transport/raw");
+  transport = std::string((argc > 1) ? argv[1] : "imagem_transport/raw_img");
   if (transport.compare(0,pkgname.length(),pkgname)) {
       transport = pkgname + "/" + transport;
   }
-  message_transport::Subscriber sub = it.subscribe("image_source", 1, callback, 
+  message_transport::Subscriber sub = it.subscribe("/image_source", 1, callback, 
 		  transport);
   ROS_INFO("test_receiver started");
 

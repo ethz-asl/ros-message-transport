@@ -40,7 +40,7 @@ namespace theora_imagem_transport {
         Base::subscribeImpl(nh, base_topic, queue_size, callback, tracked_object, transport_hints);
 
         // Set up reconfigure server for this topic
-        reconfigure_server_ = boost::make_shared<ReconfigureServer>(this->nh());
+        reconfigure_server_ = boost::make_shared<ReconfigureServer>(Base::nh());
         ReconfigureServer::CallbackType f = boost::bind(&TheoraSubscriber::configCb, this, _1, _2);
         reconfigure_server_->setCallback(f);
     }

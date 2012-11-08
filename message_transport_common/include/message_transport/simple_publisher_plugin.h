@@ -64,7 +64,7 @@ namespace message_transport {
 					const ros::VoidPtr& tracked_object, bool latch)
 			{
 				/// @todo This does not work if base_topic is a global name.
-				ros::NodeHandle param_nh(nh, base_topic);
+				ros::NodeHandle param_nh(nh, getTopicToAdvertise(base_topic));
 				simple_impl_.reset(new SimplePublisherPluginImpl(nh,param_nh));
 				simple_impl_->pub_ = nh.advertise<M>(getTopicToAdvertise(base_topic), queue_size,
 						bindCB(user_connect_cb, &SimplePublisherPlugin::connectCallbackHandle),
@@ -142,7 +142,7 @@ namespace message_transport {
 		private:
 			struct SimplePublisherPluginImpl
 			{
-				SimplePublisherPluginImpl(const ros::NodeHandle& nh, const ros::NodeHandle& param_nh)
+				SimplePublisherPluginImpl(ros::NodeHandle& nh, const ros::NodeHandle& param_nh)
 					: nh_(nh), param_nh_(param_nh)
 				{
 				}

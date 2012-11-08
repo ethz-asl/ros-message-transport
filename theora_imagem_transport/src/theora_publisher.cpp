@@ -54,7 +54,7 @@ namespace theora_imagem_transport
         Base::advertiseImpl(nh, base_topic, queue_size, user_connect_cb, user_disconnect_cb, tracked_object, latch);
 
         // Set up reconfigure server for this topic
-        reconfigure_server_ = boost::make_shared<ReconfigureServer>(this->getNodeHandle());
+        reconfigure_server_ = boost::make_shared<ReconfigureServer>(this->getParamNode());
         ReconfigureServer::CallbackType f = boost::bind(&TheoraPublisher::configCb, this, _1, _2);
         reconfigure_server_->setCallback(f);
     }

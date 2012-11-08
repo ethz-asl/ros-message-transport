@@ -18,10 +18,11 @@ class ImagePublisher {
 
 		ImagePublisher(ros::NodeHandle &n) : n_(n), 
 			it_(n_,"imagem_transport","sensor_msgs::Image") {
-			image_pub_ = it_.advertise("image_source",1);
+			image_pub_ = it_.advertise("/image_source",1);
             cv_ptr.reset(new cv_bridge::CvImage);
             cv_ptr->image.create(cvSize(1500,1000),CV_8UC3);
             cv_ptr->toImageMsg(image);
+            image.encoding = "rgb8";
 		}
 
 		~ImagePublisher()
@@ -49,7 +50,7 @@ class ImagePublisher {
 int main(int argc, char** argv)
 {
 	ros::init(argc, argv, "test_publisher");
-	ros::NodeHandle n;
+	ros::NodeHandle n("~");
 	ImagePublisher ic(n);
 	ic.mainloop();
 	return 0;

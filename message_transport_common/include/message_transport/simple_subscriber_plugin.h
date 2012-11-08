@@ -71,7 +71,7 @@ namespace message_transport {
 					const typename SubscriberPlugin<Base>::Callback& callback, const ros::VoidPtr& tracked_object,
 					const TransportHints& transport_hints)
 			{
-				simple_impl_.reset(new SimpleSubscriberPluginImpl(transport_hints.getParameterNH()));
+				simple_impl_.reset(new SimpleSubscriberPluginImpl(nh, getTopicToSubscribe(base_topic)));
 
 				simple_impl_->sub_ = nh.subscribe<M>(getTopicToSubscribe(base_topic), queue_size,
 						boost::bind(&SimpleSubscriberPlugin::internalCallback, this, _1, callback),
@@ -89,8 +89,8 @@ namespace message_transport {
 		private:
 			struct SimpleSubscriberPluginImpl
 			{
-				SimpleSubscriberPluginImpl(const ros::NodeHandle& nh)
-					: param_nh_(nh)
+				SimpleSubscriberPluginImpl(ros::NodeHandle & nh, const std::string& new_topic)
+					: param_nh_(nh,new_topic)
 				{
 				}
 
