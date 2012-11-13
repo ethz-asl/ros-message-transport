@@ -22,7 +22,7 @@ class ImagePublisher {
             cv_ptr.reset(new cv_bridge::CvImage);
             cv_ptr->image.create(cvSize(1500,1000),CV_8UC3);
             cv_ptr->toImageMsg(image);
-            image.encoding = "rgb8";
+            image.encoding = "bgr8";
 		}
 
 		~ImagePublisher()

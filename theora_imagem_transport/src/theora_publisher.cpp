@@ -130,11 +130,15 @@ namespace theora_imagem_transport
         if (!ensureEncodingContext(message, publish_fn))
             return;
 
+        // Temporary boost pointer to define the life time of cv_image_ptr
+        // below
+        boost::shared_ptr<int> tracked_object(new int(0));
+
         /// @todo fromImage is deprecated
         /// @todo Optimized gray-scale path, rgb8
         /// @todo fromImage can throw cv::Exception on bayer encoded images
-        cv_bridge::CvImageConstPtr cv_image_ptr = cv_bridge::toCvShare(sensor_msgs::ImageConstPtr(&message), "bgr8");
-        if (!cv_image_ptr == 0) {
+        cv_bridge::CvImageConstPtr cv_image_ptr = cv_bridge::toCvShare(message,tracked_object, "bgr8");
+        if (!cv_image_ptr) {
             ROS_ERROR("Unable to convert from '%s' to bgr8", message.encoding.c_str());
             return;
         }
