@@ -31,7 +31,7 @@ namespace theora_imagem_transport {
 
 
     void TheoraSubscriber::subscribeImpl(ros::NodeHandle& nh, const std::string& base_topic, uint32_t queue_size,
-            const typename SubscriberPlugin<sensor_msgs::Image>::Callback& callback, const ros::VoidPtr& tracked_object,
+            const ImageCallback& callback, const ros::VoidPtr& tracked_object,
             const message_transport::TransportHints& transport_hints)
     {
         // queue_size doesn't account for the 3 header packets, so we correct (with a little extra) here.

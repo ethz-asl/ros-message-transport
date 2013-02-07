@@ -28,10 +28,12 @@ namespace theora_imagem_transport {
             virtual void internalCallback(const theora_image_transport::Packet::ConstPtr &msg, 
                     const message_transport::SimpleSubscriberPlugin<sensor_msgs::Image,theora_image_transport::Packet>::Callback& user_cb);
 
+			typedef SubscriberPlugin<sensor_msgs::Image>::Callback ImageCallback;
+			
             // Overridden to bump queue_size, otherwise we might lose headers
             // Overridden to tweak arguments and set up reconfigure server
 			virtual void subscribeImpl(ros::NodeHandle& nh, const std::string& base_topic, uint32_t queue_size,
-					const typename SubscriberPlugin<sensor_msgs::Image>::Callback& callback, const ros::VoidPtr& tracked_object,
+					const ImageCallback& callback, const ros::VoidPtr& tracked_object,
 					const message_transport::TransportHints& transport_hints);
 
             // Dynamic reconfigure support
