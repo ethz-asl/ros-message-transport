@@ -31,7 +31,7 @@ int main(int argc, char** argv)
     message_transport::MessageTransport<std_msgs::String> 
         it(nh,"string_transport","std_msgs::String");
     std::string pkgname("string_transport");
-    transport = std::string((argc > 1) ? argv[1] : "string_transport/raw");
+    transport = std::string((argc > 1) ? argv[1] : "string_transport/raw_str");
     if (transport.compare(0,pkgname.length(),pkgname)) {
         transport = pkgname + "/" + transport;
     }
