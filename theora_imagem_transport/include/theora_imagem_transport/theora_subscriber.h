@@ -28,7 +28,7 @@ namespace theora_imagem_transport {
             virtual void internalCallback(const theora_image_transport::Packet::ConstPtr &msg, 
                     const message_transport::SimpleSubscriberPlugin<sensor_msgs::Image,theora_image_transport::Packet>::Callback& user_cb);
 
-			typedef SubscriberPlugin<sensor_msgs::Image>::Callback ImageCallback;
+			typedef message_transport::SubscriberPlugin<sensor_msgs::Image>::Callback ImageCallback;
 			
             // Overridden to bump queue_size, otherwise we might lose headers
             // Overridden to tweak arguments and set up reconfigure server
