@@ -9,6 +9,7 @@ include($ENV{ROS_ROOT}/core/rosbuild/rosbuild.cmake)
 #  MinSizeRel     : w/o debug symbols, w/ optimization, stripped binaries
 #set(ROS_BUILD_TYPE RelWithDebInfo)
 
+find_package(OpenCV REQUIRED)
 rosbuild_init()
 rosbuild_include(templated_transports templated_transports)
 
@@ -32,13 +33,13 @@ rosbuild_add_library(${PROJECT_NAME} src/manifest.cpp)
 rosbuild_link_boost(${PROJECT_NAME} system)
 
 rosbuild_add_executable(list_transports src/list_transports.cpp)
-target_link_libraries(list_transports ${PROJECT_NAME})
+target_link_libraries(list_transports ${PROJECT_NAME} ${OpenCV_LIBS})
 
 rosbuild_add_executable(test_publisher test/publisher.cpp)
-target_link_libraries(test_publisher ${PROJECT_NAME})
+target_link_libraries(test_publisher ${PROJECT_NAME} ${OpenCV_LIBS})
 
 rosbuild_add_executable(test_receiver test/receiver.cpp)
-target_link_libraries(test_receiver ${PROJECT_NAME})
+target_link_libraries(test_receiver ${PROJECT_NAME} ${OpenCV_LIBS})
 
 #common commands for building c++ executables and libraries
 #rosbuild_add_library(${PROJECT_NAME} src/example.cpp)
